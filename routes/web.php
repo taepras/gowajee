@@ -26,3 +26,5 @@ Route::get('/api/courses/{id}', 'CoursesApiController@getCourse');
 Route::get('/api/courses', 'CoursesApiController@getEnrolledCourses');
 Route::post('/api/courses', 'CoursesApiController@register');
 Route::delete('/api/courses', 'CoursesApiController@withdraw');
+
+Route::post('/api/command', 'SpeechController@test');
