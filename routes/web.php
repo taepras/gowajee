@@ -11,6 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Auth::routes();
+
+Route::get('/', 'HomeController@index');
+
+
+Route::get('/api/courses/{day}/{time}', 'CoursesApiController@getCoursesByTime');
+Route::get('/api/courses/all', 'CoursesApiController@getAllCourses');
+Route::get('/api/courses/{id}', 'CoursesApiController@getCourse');
+Route::get('/api/courses', 'CoursesApiController@getEnrolledCourses');
+Route::post('/api/courses', 'CoursesApiController@register');
+Route::delete('/api/courses', 'CoursesApiController@withdraw');

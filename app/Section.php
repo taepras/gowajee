@@ -25,4 +25,11 @@ class Section extends Model
     {
         return $this->belongsToMany('App\User', 'enrollments', 'section_id', 'user_id');
     }
+
+    public function asCourse()
+    {
+        $course = $this->course()->with('sections');
+        $course->where('section_id', '=', $this->id);
+        return;
+    }
 }

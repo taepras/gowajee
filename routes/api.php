@@ -17,8 +17,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/courses/{day}/{time}', 'CoursesApiController@getCoursesByTime');
-Route::get('/courses/{id}', 'CoursesApiController@getCourse');
-Route::get('/courses', 'CoursesApiController@getAllCourses');
-Route::post('/courses', 'CoursesApiController@register');
-Route::delete('/courses', 'CoursesApiController@withdraw');
+// Route::get('/courses/{day}/{time}', 'CoursesApiController@getCoursesByTime');
+// Route::get('/courses/all', 'CoursesApiController@getAllCourses');
+// Route::get('/courses/{id}', 'CoursesApiController@getCourse');
+// Route::get('/courses', 'CoursesApiController@getEnrolledCourses');
+// Route::post('/courses', 'CoursesApiController@register');
+// Route::delete('/courses', 'CoursesApiController@withdraw');

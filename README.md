@@ -4,10 +4,23 @@
 
 After pulling
 =============
-run
+initialize database
 ```
 php artisan migrate
 php artisan db:seed
+```
+
+Starting the server
+===================
+run
+```
+php artisan serve
+```
+the web page will be available at http://localhost:8000
+use this user to test the site
+```
+usr: user@user.com
+pwd: user
 ```
 
 Data Types
@@ -19,7 +32,6 @@ Course
 {
 	id: number,
 	name: string,
-    sections: [ Section ]
 }
 ```
 
@@ -62,7 +74,7 @@ Speech Recognition
 	{
 		functionName: String,
 		params: {
-			// like the input of the corresponding function
+			... // like the input of the corresponding function
 		},
 		needsConfirm: boolean
 	}
@@ -90,9 +102,12 @@ Core Functions
 	- return: 		a detailed list of all available courses & sections.
 	- return format: JSON
 	```javascript
-	{
-    	courses: [ Course ]
-    }
+	[
+		{
+			Course,
+			sections: [ Section ]
+		}
+	]
     ```
 
 - GET 	/courses
@@ -102,9 +117,12 @@ Core Functions
 	- return: 		a detailed list of enrolled courses & sections.
 	- return format: JSON
 	```javascript
-	{
-    	courses: [ Course ]
-    }
+	[
+		{
+			Section,
+			course: [ Course ]
+		}
+	]
     ```
 
 - GET 	/courses/{id}
@@ -115,8 +133,9 @@ Core Functions
 	- return format: JSON
 	```javascript
 	{
-    	course: Course
-    }
+		Course,
+		sections: [ Section ]
+	}
     ```
 
 - GET   /api/courses/time/{day}/{time}
@@ -128,9 +147,12 @@ Core Functions
 	- return: 		a list of courses & sections available on the given time slot
 	- return format: JSON
 	```javascript
-	{
-		courses: [ Course ]
-	}
+	[
+		{
+			Course,
+			sections: [ Section ]
+		}
+	]
 	```
 
 - POST   /api/courses

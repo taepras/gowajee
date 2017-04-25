@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+// use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Course;
 use App\Section;
 use App\User;
 // use Request;
+use Response;
 
 class CoursesApiController extends Controller
 {
@@ -18,7 +21,15 @@ class CoursesApiController extends Controller
 
     public function getCourse($id)
     {
-        return Course::with('sections')->where('id', '=', $id)->get();
+        return Course::with('sections')->where('id', '=', $id)->get()[0];
+    }
+
+    public function getEnrolledCourses()
+    {
+        if(!Auth::check())
+            return Response::json(['msg' => 'Not logged in'], 403);
+        $user = Auth::user();
+        return $user->courses()->with('course')->get();
     }
 
     public function getCoursesByTime($day, $time)
@@ -31,8 +42,9 @@ class CoursesApiController extends Controller
 
     public function register(Request $request)
     {
-        // TODO change this to the authenticated user
-        $user = User::find(1);
+        if(!Auth::check())
+            return Response::json(['msg' => 'Not logged in'], 403);
+        $user = Auth::user();
 
         // get POST json request
         $courseId = $request->input('course');
@@ -58,8 +70,9 @@ class CoursesApiController extends Controller
 
     public function withdraw(Request $request)
     {
-        // TODO change this to the authenticated user
-        $user = User::find(1);
+        if(!Auth::check())
+            return Response::json(['msg' => 'Not logged in'], 403);
+        $user = Auth::user();
 
         $courseId = $request->input('course');
         if (!$courseId)
