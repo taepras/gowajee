@@ -1,5 +1,15 @@
 # Gowajee Course Registration
 
+2110432 Automatic Speech Recognition - Term Project
+
+After pulling
+=============
+run
+```
+php artisan migrate
+php artisan db:seed
+```
+
 Data Types
 ==========
 
@@ -108,7 +118,7 @@ Core Functions
     	course: Course
     }
     ```
-    
+
 - GET   /api/courses/time/{day}/{time}
 	- name:			get_courses_by_time
 	- description:	get info about courses offered on a specific time slot
