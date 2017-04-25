@@ -28,8 +28,8 @@ Section
 ```javascript
 {
     id: number,
-    teacher: string,
-    enrolledCount: number,
+    lecturer: string,
+    enrolled: number,
     capacity: number,
     isEnrolled: boolean
 }
@@ -96,7 +96,7 @@ Core Functions
     ```
 
 - GET 	/courses
-	- name:			get_courses_enrolled
+	- name:			get_enrolled_courses
 	- description:	get info about all courses the user have enrolled
 	- params: 		none
 	- return: 		a detailed list of enrolled courses & sections.
@@ -148,7 +148,6 @@ Core Functions
 	```javascript
 	{
 		success: boolean
-		course: Course
 	}
 	```
 
@@ -166,6 +165,5 @@ Core Functions
 	```javascript
 	{
 		success: boolean
-		course: Course
 	}
 	```

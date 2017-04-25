@@ -17,7 +17,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '2110432',
-            'section_id' => '1',
+            'section_number' => '1',
             'day' => 'thu',
             'time' => 'afternoon',
             'lecturer' => 'AST',
@@ -31,7 +31,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '3743422',
-            'section_id' => '1',
+            'section_number' => '1',
             'day' => 'wed',
             'time' => 'afternoon',
             'lecturer' => 'STAFF',
@@ -39,7 +39,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '3743422',
-            'section_id' => '2',
+            'section_number' => '2',
             'day' => 'thu',
             'time' => 'afternoon',
             'lecturer' => 'STAFF',
@@ -53,7 +53,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '2313213',
-            'section_id' => '1',
+            'section_number' => '1',
             'day' => 'mon',
             'time' => 'afternoon',
             'lecturer' => 'ANV',
@@ -61,7 +61,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '2313213',
-            'section_id' => '2',
+            'section_number' => '2',
             'day' => 'tue',
             'time' => 'afternoon',
             'lecturer' => 'ANV',
@@ -69,7 +69,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '2313213',
-            'section_id' => '3',
+            'section_number' => '3',
             'day' => 'wed',
             'time' => 'afternoon',
             'lecturer' => 'ANV',
@@ -77,7 +77,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '2313213',
-            'section_id' => '4',
+            'section_number' => '4',
             'day' => 'thu',
             'time' => 'afternoon',
             'lecturer' => 'ANV',
@@ -85,7 +85,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '2313213',
-            'section_id' => '5',
+            'section_number' => '5',
             'day' => 'fri',
             'time' => 'afternoon',
             'lecturer' => 'ANV',
@@ -99,7 +99,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '2502390',
-            'section_id' => '1',
+            'section_number' => '1',
             'day' => 'wed',
             'time' => 'afternoon',
             'lecturer' => 'SSV',
@@ -107,7 +107,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '2502390',
-            'section_id' => '2',
+            'section_number' => '2',
             'day' => 'wed',
             'time' => 'morning',
             'lecturer' => 'VPT',
@@ -121,7 +121,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '3700105',
-            'section_id' => '1',
+            'section_number' => '1',
             'day' => 'mon',
             'time' => 'morning',
             'lecturer' => 'STAFF',
@@ -135,7 +135,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '0123101',
-            'section_id' => '1',
+            'section_number' => '1',
             'day' => 'mon',
             'time' => 'morning',
             'lecturer' => 'STAFF',
@@ -143,7 +143,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '0123101',
-            'section_id' => '2',
+            'section_number' => '2',
             'day' => 'mon',
             'time' => 'afternoon',
             'lecturer' => 'STAFF',
@@ -151,7 +151,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '0123101',
-            'section_id' => '3',
+            'section_number' => '3',
             'day' => 'wed',
             'time' => 'morning',
             'lecturer' => 'STAFF',
@@ -159,7 +159,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '0123101',
-            'section_id' => '4',
+            'section_number' => '4',
             'day' => 'wed',
             'time' => 'afternoon',
             'lecturer' => 'STAFF',
@@ -167,7 +167,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '0123101',
-            'section_id' => '5',
+            'section_number' => '5',
             'day' => 'fri',
             'time' => 'morning',
             'lecturer' => 'STAFF',
@@ -175,7 +175,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '0123101',
-            'section_id' => '6',
+            'section_number' => '6',
             'day' => 'fri',
             'time' => 'afternoon',
             'lecturer' => 'STAFF',
@@ -189,7 +189,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '2604362',
-            'section_id' => '1',
+            'section_number' => '1',
             'day' => 'wed',
             'time' => 'morning',
             'lecturer' => 'JSC',
@@ -197,7 +197,7 @@ class CoursesTableSeeder extends Seeder
         ]);
         DB::table('sections')->insert([
             'course_id' => '2604362',
-            'section_id' => '2',
+            'section_number' => '2',
             'day' => 'wed',
             'time' => 'morning',
             'lecturer' => 'STAFF',

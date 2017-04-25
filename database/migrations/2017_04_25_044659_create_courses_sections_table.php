@@ -23,7 +23,7 @@ class CreateCoursesSectionsTable extends Migration
 
         Schema::create('sections', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('section_id');
+            $table->integer('section_number');
             $table->string('course_id')->references('id')->on('courses');
             $table->string('lecturer');
             $table->enum('day', ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']);
@@ -31,33 +31,32 @@ class CreateCoursesSectionsTable extends Migration
             $table->integer('capacity');
             $table->timestamps();
 
-            $table->unique(['section_id', 'course_id']);
+            $table->unique(['section_number', 'course_id']);
         });
 
         Schema::create('enrollments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->references('id')->on('users');
-            $table->string('course_id')->references('course_id')->on('sections');
             $table->integer('section_id')->references('id')->on('sections');
             $table->timestamps();
 
-            $table->unique(['user_id', 'course_id', 'section_id']);
+            $table->unique(['user_id', 'section_id']);
         });
 
-        DB::statement('
-        CREATE VIEW sections_info AS
-            SELECT
-	            courses.name,
-                sections.*,
-                COUNT(user_id) AS enrolled
-            FROM courses
-                INNER JOIN sections
-                    ON courses.id = sections.course_id
-                LEFT OUTER JOIN enrollments
-                    ON sections.course_id = enrollments.course_id
-                        AND sections.section_id = enrollments.section_id
-                GROUP BY sections.course_id, sections.section_id
-        ');
+        // DB::statement('
+        // CREATE VIEW sections_info AS
+        //     SELECT
+	    //         courses.name,
+        //         sections.*,
+        //         COUNT(user_id) AS enrolled
+        //     FROM courses
+        //         INNER JOIN sections
+        //             ON courses.id = sections.course_id
+        //         LEFT OUTER JOIN enrollments
+        //             ON sections.course_id = enrollments.course_id
+        //                 AND sections.section_id = enrollments.section_id
+        //         GROUP BY sections.course_id, sections.section_id
+        // ');
     }
 
     /**
@@ -70,6 +69,6 @@ class CreateCoursesSectionsTable extends Migration
         Schema::dropIfExists('courses');
         Schema::dropIfExists('sections');
         Schema::dropIfExists('enrollments');
-        DB::statement('DROP VIEW IF EXISTS sections_info');
+        // DB::statement('DROP VIEW IF EXISTS sections_info');
     }
 }
