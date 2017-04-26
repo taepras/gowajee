@@ -4,7 +4,13 @@
 
 After pulling
 =============
-initialize database
+1. create a new database
+2. if .env file does not exist, copy .env.example file and rename to .env
+3. in .env file, set:
+	- database name (DB_DATABASE)
+	- db host & port (DB_HOST & DB_PORT), default port of MySQL is 3306
+	- db username & password (DB_USERNAME & DB_PASSWORD)
+4. initialize database
 ```
 php artisan migrate
 php artisan db:seed
