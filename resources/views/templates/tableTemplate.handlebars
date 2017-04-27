@@ -1,0 +1,26 @@
+<script id="table-template" type="text/x-handlebars-template">
+    <div>
+    <table class="table">
+        <tr>
+            <th>Course ID</th>
+            <th>Course Name</th>
+            <th>Section Number</th>
+            <th>Day</th>
+            <th>Time</th>
+            <th>Lecturer</th>
+            <th>Enrolled</th>
+        </tr>
+        {{#each section}}
+            <tr>
+                <td>{{course.id}}</td>
+                <td>{{course.name}}</td>
+                <td>{{section_number}}</td>
+                <td>{{day}}</td>
+                <td>{{time}}</td>
+                <td>{{lecturer}}</td>
+                <td>{{enrolled}}/{{capacity}}</td>
+            </td>
+        {{/each}}
+    </table>
+</div>
+</script>

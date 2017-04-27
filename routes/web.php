@@ -19,6 +19,8 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index');
 
+Route::get('/test', 'HomeController@test');
+
 
 Route::get('/api/courses/{day}/{time}', 'CoursesApiController@getCoursesByTime');
 Route::get('/api/courses/all', 'CoursesApiController@getAllCourses');
