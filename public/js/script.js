@@ -4,6 +4,7 @@ $(document).ready(function(){
    if(test1 =="admin"){
          $('#all').hide();
    }
+   
    //เรื่มอัดเสียง
     $("#record").click(function(){        
         $("#bottom").empty(); 
@@ -27,7 +28,7 @@ $(document).ready(function(){
             });
             }  */ 
             $("#top").append("<h2>คำสั่งที่ท่านพูด คือ</h2>");   
-            $("#top").append("<h2>ถอนวิชาดิจิตอลโฟโต้</h2>");
+            $("#top").append("<h2>แสดงรายวิชาทั้งหมด</h2>");
             $("#bottom").empty(); 
             $("#bottom").append("<button class =\"w3-btn w3-hover-opacity w3-indigo w3-section w3-round w3-border-bottom w3-border-indigo\" id = \"submit2\">submit</button>&nbsp;");   
  
@@ -46,10 +47,12 @@ $(document).ready(function(){
             if(function_name == "get_all_courses") {
                 $.ajax({
                 type: "GET",
-                url: 'http://127.0.0.1:8000/courses/all',
+                url: 'http://localhost:8000/api/courses/all',
                 contentType : "application/json",    
-                success: function(response){
-                  $("#mid").append("<p>"+response+"</p>")  
+                success: function(data){
+                  result = JSON.stringify(data, null, 4)    
+                  console.log(result);
+                  $("#mid").append("<p>"+result+"</p>");  
                 },
                 error: function(error) {
                     console.log(error);
@@ -59,8 +62,50 @@ $(document).ready(function(){
             });   
         });                    
     });
-        
-  
+    
+    $("#allDisplay").click(function(){ 
+      $("#contain").empty();
+      $("#topBar").text("รายวิชาทั้งหมด");
+      function_name = "get_all_courses";    
+            if(function_name == "get_all_courses") {
+                $.ajax({
+                type: "GET",
+                url: 'http://localhost:8000/api/courses/all',
+                contentType : "application/json",    
+                success: function(data){
+                  result = JSON.stringify(data, null, 4)    
+                  console.log(result);
+                  $("#contain").append("<p>"+result+"</p>");  
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+                });  
+        }    
+      });   
+      $("#courseDisplay").click(function(){ 
+      $("#contain").empty();
+      $("#topBar").text("รายวิชาที่ลงทะเบียน");
+      function_name = "get-enrolled";    
+            if(function_name == "get-enrolled") {
+                $.ajax({
+                type: "GET",
+                url: 'http://localhost:8000/api/courses/',
+                contentType : "application/json",    
+                success: function(data){
+                  result = JSON.stringify(data, null, 4)    
+                  console.log(result);
+                  $("#contain").append("<p>"+result+"</p>");  
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+                });  
+        }    
+      });   
+     $("#mainPage").click(function(){ 
+        location.reload();  
+     });  
     
     
     
