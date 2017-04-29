@@ -29,6 +29,12 @@ class SpeechController extends Controller
         return response()->json($output);
     }
 
+    public function uploadWav()
+    {
+        return view('uploadWav');
+
+    }
+
     /**
      * Display a listing of the resource.
      *
