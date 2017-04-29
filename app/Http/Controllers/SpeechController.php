@@ -17,7 +17,8 @@ class SpeechController extends Controller
         // $output = exec('python ./python/kaldi.py');
 
         // get array from python have 2 way to return
-        $output = exec('python ./python/kaldi.py');
+        // $output = exec('python ./python/kaldi.py');
+        $output = exec('python client.py -u ws://localhost:8080/client/ws/speech -r 32000 000.wav');
         $output = json_decode($output);
         return $output;
         return response()->json($output);
