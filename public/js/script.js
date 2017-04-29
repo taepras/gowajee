@@ -112,7 +112,8 @@ function recognizeFunction() {
             file: 'xxx'
         } // TODO get real file
     }).done(function(data) {
-        switch (data.function) {
+        console.log(data)
+        switch (data.functionName) {
             case 'get_all_courses':
                 pendingFunction = showAllCourses;
                 break;
