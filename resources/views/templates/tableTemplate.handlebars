@@ -1,26 +1,54 @@
 <script id="table-template" type="text/x-handlebars-template">
-    <div>
+    <form id="filter" class="form-inline">
+        <div class="form-group">
+            <label>วัน</label>
+            <select class="form-control" id="select-day">
+                <option></option>
+                <option value="mon">จันทร์</option>
+                <option value="tue">อังคาร</option>
+                <option value="wed">พุธ</option>
+                <option value="thu">พฤหัส</option>
+                <option value="fri">ศุกร์</option>
+                <option value="sat">เสาร์</option>
+                <option value="sun">อาทิตย์</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>เวลา</label>
+            <select class="form-control" id="select-time">
+                <option></option>
+                <option value="morning">เช้า</option>
+                <option value="afternoon">บ่าย</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">กรองผลการค้นหา</button>
+    </form>
+    <hr>
     <table class="table">
         <tr>
-            <th>Course ID</th>
-            <th>Course Name</th>
-            <th>Section Number</th>
-            <th>Day</th>
-            <th>Time</th>
-            <th>Lecturer</th>
-            <th>Enrolled</th>
+            <th>รหัสวิชา</th>
+            <th>ชื่อวิชา</th>
+            <th>ตอนเรียน</th>
+            <th>วัน-เวลา</th>
+            <th>ผู้สอน</th>
+            <th>ผู้ลงทะเบียน</th>
+            <th></th>
         </tr>
         {{#each section}}
             <tr>
-                <td>{{course.id}}</td>
-                <td>{{course.name}}</td>
+                <td><a href="#" class="course-id" data-course-id="{{course.id}}">{{course.id}}</a></td>
+                <td><a href="#" class="course-id" data-course-id="{{course.id}}">{{course.name}}</a></td>
                 <td>{{section_number}}</td>
-                <td>{{day}}</td>
-                <td>{{time}}</td>
+                <td>{{day}} {{time}}</td>
                 <td>{{lecturer}}</td>
                 <td>{{enrolled}}/{{capacity}}</td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-xs register"
+                        data-course-id="{{course.id}}" data-section-number="{{section_number}}">
+                        ลงทะเบียน
+                    </button>
+                </td>
             </td>
         {{/each}}
     </table>
-</div>
 </script>

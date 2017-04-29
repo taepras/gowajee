@@ -167,7 +167,7 @@ Core Functions
 	- params: 		JSON
 	```javascript
 	{
-		course: number,		// course id
+		course: String,		// course id
 		section: number		// section id
 	}
 	```
