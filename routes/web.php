@@ -30,3 +30,4 @@ Route::post('/api/courses', 'CoursesApiController@register');
 Route::delete('/api/courses', 'CoursesApiController@withdraw');
 
 Route::post('/api/command', 'SpeechController@test');
+Route::get('/forTestWav', 'SpeechController@uploadWav');
