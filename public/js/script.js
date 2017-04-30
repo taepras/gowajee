@@ -343,10 +343,7 @@ function flipCourseSection (data) {
     // flip course-section inside-out to make section-course structure
     var dataFormatted = [];
     for (var i = 0; i < data.length; i++) {
-        var courseInfo = {
-            id: data[i].id,
-            name: data[i].name
-        };
+        var courseInfo = data[i];
         for(var j = 0; j < data[i].sections.length; j++) {
             var section = data[i].sections[j];
             section.course = courseInfo;

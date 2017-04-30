@@ -3,11 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Section extends Model
 {
     //
-    protected $appends = ['enrolled'];
+    protected $appends = ['enrolled', 'is_enrolled'];
 
     public function getEnrolledAttribute()
     {
@@ -31,5 +32,9 @@ class Section extends Model
         $course = $this->course()->with('sections');
         $course->where('section_id', '=', $this->id);
         return;
+    }
+
+    public function getIsEnrolledAttribute () {
+        return !!$this->students()->find(Auth::user()->id);
     }
 }
