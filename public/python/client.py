@@ -119,7 +119,7 @@ def main():
                   save_adaptation_state_filename=args.save_adaptation_state, send_adaptation_state_filename=args.send_adaptation_state)
     ws.connect()
     result = ws.get_full_hyp()
-    print(json.dumps(get_task([result]+result.split())))
+    print(json.dumps([result]+get_task(result.split())))
     # print(result)
 
 def get_task(s):
