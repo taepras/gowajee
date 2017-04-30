@@ -24,7 +24,7 @@
                 <img src="/image/toplogo01.gif" alt="logo">
             </div>
             {{-- <h3 class="w3-bar-item">Menu</h3> --}}
-            <a href="#" id="mainPage"  class="w3-bar-item menu">อัดเสียง</a>
+            <a href="#" id="mainPage"  class="w3-bar-item menu">หน้าแรก</a>
             <a href="#" id="allDisplay" class="w3-bar-item menu">ค้นหารายวิชา</a>
             <a href="#" id="courseDisplay" class="w3-bar-item menu">รายวิชาที่ลงทะเบียน</a>
             {{-- <a href="/logout" class="w3-bar-item menu">ออกจากระบบ</a> --}}
@@ -44,7 +44,7 @@
 
         <div id="page">
             <div class="w3-container w3-center" id="topBar">
-                อัดเสียง
+                เข้าสู่ระบบลงทะเบียนเรียน
             </div>
             <div id ="contain">
                 <div  id="top" class ="w3-center">
@@ -58,14 +58,14 @@
                     <br>นิสิตต้องกด <span style="color: #f00">ออกจากระบบ</span> ทุกครั้งที่เสร็จสิ้นการใช้งาน
                     <br>เพื่อมิให้ผู้อื่นเข้าใช้งาน ในชื่อของท่านได้
                     </h1>
-                    <img id ="mainImage"  src="image/microphone.png">
+                    {{-- <img id ="mainImage"  src="image/microphone.png"> --}}
                 </div>
 
                 <div id ="wavAPI" class ="w3-center">
                 </div>
 
                 <div id ="bottom" class ="w3-center">
-                    <button class="w3-btn w3-hover-opacity w3-indigo w3-section w3-round w3-border-bottom w3-border-indigo  w3-layout-cell time" id ="record" >เริ่มการอัดเสียง <i class="fa fa-microphone" style="font-size:25px"></i></button>
+                    {{-- <button class="w3-btn w3-hover-opacity w3-indigo w3-section w3-round w3-border-bottom w3-border-indigo  w3-layout-cell time" id ="record" >เริ่มการอัดเสียง <i class="fa fa-microphone" style="font-size:25px"></i></button> --}}
                 </div>
             </div>
         </div>
