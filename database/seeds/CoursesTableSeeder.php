@@ -11,18 +11,18 @@ class CoursesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('courses')->insert([
-            'id' => '2110432',
-            'name' => 'AUTO SPEECH RECOG'
-        ]);
-        DB::table('sections')->insert([
-            'course_id' => '2110432',
-            'section_number' => '1',
-            'day' => 'thu',
-            'time' => 'afternoon',
-            'lecturer' => 'AST',
-            'capacity' => 40
-        ]);
+        // DB::table('courses')->insert([
+        //     'id' => '2110432',
+        //     'name' => 'AUTO SPEECH RECOG'
+        // ]);
+        // DB::table('sections')->insert([
+        //     'course_id' => '2110432',
+        //     'section_number' => '1',
+        //     'day' => 'thu',
+        //     'time' => 'afternoon',
+        //     'lecturer' => 'AST',
+        //     'capacity' => 40
+        // ]);
 
 
         DB::table('courses')->insert([

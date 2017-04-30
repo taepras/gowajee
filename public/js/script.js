@@ -353,8 +353,7 @@ function flipCourseSection (data) {
     return dataFormatted;
 }
 
-function speak(words) {
-    // words = ['register', 'subj/intro_pack', 'section', 'num/one'];
+function speak(words, rate = 1.6) {
     audios = [];
     loadedCount = 0;
     for (var i = 0; i < words.length; i++) {
@@ -362,18 +361,19 @@ function speak(words) {
         audios.push(audio);
         audio.addEventListener('loadedmetadata', function() {
             loadedCount++;
+
             if (loadedCount >= words.length) {
-                startSpeaking(audios)
+                startSpeaking(audios, rate)
             }
         });
     }
-
 }
 
-function startSpeaking(audios) {
+function startSpeaking(audios, rate) {
     var accDuration = 0;
     for (var i = 0; i < audios.length; i++) {
-        delayedSpeak(audios[i], accDuration * 1000);
+        audios[i].playbackRate = rate;
+        delayedSpeak(audios[i], accDuration / rate * 1000 - i * 60 / rate);
         accDuration += audios[i].duration;
     }
 }

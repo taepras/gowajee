@@ -14,7 +14,7 @@ class EnrollmentsTableSeeder extends Seeder
         //
         DB::table('enrollments')->insert([
             'user_id' => '1',
-            'section_id' => '4'
+            'section_id' => '3'
         ]);
         DB::table('enrollments')->insert([
             'user_id' => '1',
