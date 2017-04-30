@@ -156,7 +156,7 @@ def get_task(s):
     if ss == '010000000': return [2,2,2]
     if ss == '001100000' or ss == '001100100': return [3,day_eng[day.index(list(set(s)&set(day))[0])],time_eng[time.index(list(set(s)&set(time))[0])]]
     if ss == '000010000' or ss == '000010100': return [4,course_eng[course.index(cc[0])],course_eng[course.index(cc[0])]]
-    if ss == '000011100': return [5,course_eng[course.index(cc[0])],num.index(list(set(s)&num)[0])+1]
+    if ss == '000011100': return [5,course_eng[course.index(cc[0])],num.index(list(set(s)&set(num))[0])+1]
     if ss == '000000100' or ss == '000000001' or ss == '000000101': return [6,6,6]
     if ss == '000010010': return [7,course_eng[course.index(cc[0])],course_eng[course.index(cc[0])]]
 
