@@ -29,5 +29,5 @@ Route::get('/api/courses', 'CoursesApiController@getEnrolledCourses');
 Route::post('/api/courses', 'CoursesApiController@register');
 Route::delete('/api/courses', 'CoursesApiController@withdraw');
 
-Route::post('/api/command', 'SpeechController@test');
-Route::get('/forTestWav', 'SpeechController@uploadWav');
+Route::post('/api/recognize/function', 'SpeechController@test');
+Route::get('/uploadWav', 'SpeechController@uploadWav');

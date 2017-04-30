@@ -9,24 +9,33 @@ class SpeechController extends Controller
 
     public function test(Request $request)
     {
-        // way1 to run python
-        // $command = escapeshellcmd('python ./python/kaldi.py');
-        // $output = shell_exec($command);
+        if ($request->hasFile('wavfile')) {
+            $file = $request->file('wavfile');
+            $filename = $file->getClientOriginalName();
+            $file->move(base_path().'/public/wav/',$filename);
+            return $filename;
+        }
+        return 'no';
+        
 
-        // way2 to run python
-        // $output = exec('python ./python/kaldi.py');
+        // // way1 to run python
+        // // $command = escapeshellcmd('python ./python/kaldi.py');
+        // // $output = shell_exec($command);
 
-        // get array from python have 2 way to return
-        // $output = exec('python ./python/kaldi.py');
-        $output = exec('python client.py -u ws://localhost:8080/client/ws/speech -r 32000 000.wav');
-        $output = json_decode($output);
-        return $output;
-        return response()->json($output);
+        // // way2 to run python
+        // // $output = exec('python ./python/kaldi.py');
 
-        // get object json from python
-        $output = exec('python ./python/parser.py');
-        $output = json_decode($output);
-        return response()->json($output);
+        // // get array from python have 2 way to return
+        // // $output = exec('python ./python/kaldi.py');
+        // $output = exec('python client.py -u ws://localhost:8080/client/ws/speech -r 32000 000.wav');
+        // $output = json_decode($output);
+        // return $output;
+        // return response()->json($output);
+
+        // // get object json from python
+        // $output = exec('python ./python/parser.py');
+        // $output = json_decode($output);
+        // return response()->json($output);
     }
 
     public function uploadWav()
