@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class SpeechController extends Controller
 {
 
-    public function test(Request $request)
+    public function chooseFunction(Request $request)
     {
         if ($request->hasFile('wavfile')) {
             $file = $request->file('wavfile');
@@ -21,8 +21,7 @@ class SpeechController extends Controller
             // return response()->json($output);
             // return $filename;
         }
-        return 'no';
-        
+        return 'Not have file.';
 
         // // way1 to run python
         // // $command = escapeshellcmd('python ./python/kaldi.py');
@@ -48,6 +47,20 @@ class SpeechController extends Controller
     {
         return view('uploadWav');
 
+    }
+
+    public function confirm(Request $request)
+    {
+        if ($request->hasFile('wavfile')) {
+            $file = $request->file('wavfile');
+            $filename = $file->getClientOriginalName();
+            $file->move(base_path().'/public/wav/',$filename);
+
+            $output = exec('python ./python/clientConfirm.py -u ws://localhost:8080/client/ws/speech -r 32000 ./wav/'.$filename);
+            $output = json_decode($output);
+            return $output;
+        }
+        return 'Not have file.';
     }
 
     /**
