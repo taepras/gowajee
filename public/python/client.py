@@ -119,8 +119,48 @@ def main():
                   save_adaptation_state_filename=args.save_adaptation_state, send_adaptation_state_filename=args.send_adaptation_state)
     ws.connect()
     result = ws.get_full_hyp()
-    print(json.dumps(result.split()))
+    print(json.dumps(get_task(result.split())))
     # print(result)
+
+def get_task(s):
+
+    if 'พฤหัสบดี' in s:
+        s.remove('พฤหัสบดี')
+        s.append('พฤหัส')
+
+    day = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์']
+    time = ['เช้า', 'บ่าย']
+    num = ['หนึ่ง', 'สอง', 'สาม', 'สี่', 'ห้า', 'หก', 'เจ็ด', 'แปด', 'เก้า', 'สิบ']
+    course = ['ดิจิตอลโฟโต้', 'ฟูดไซอาร์ท', 'พารากราฟไรติ้ง', 'เวทคอนโทรล', 'เพอร์ซันแนลไฟแนนซ์', 'อินโทรแพค']
+
+    day_eng = ['mon','tue','wed','thu','fri']
+    time_eng = ['am','pm']
+    course_eng = ['digital_photo','food_sci_art','paragraph_writing','weight_control','personal_finance','intro_pack']
+
+    task = ['0' for i in range(9)]
+    
+    task[0] = '1' if 'ยืนยัน' in s else '0'
+    task[1] = '1' if 'ยกเลิก' in s else '0'
+    task[2] = str(len(set(s)&set(day)))
+    task[3] = str(len(set(s)&set(time)))
+    cc = [c for c in course if c in ''.join(s)]
+    task[4] = str(len(cc))
+    task[5] = str(len(set(s)&set(num)))
+    task[6] = '1' if 'ลง' in s or 'ลงทะเบียน' in s else '0'
+    task[7] = '1' if 'ถอน' in s else '0'
+    task[8] = '1' if 'ดู' in s or 'แสดง' in s else '0'
+
+    ss = ''.join(task)
+
+    if ss == '100000000': return [1,1,1]
+    if ss == '010000000': return [2,2,2]
+    if ss == '001100000' or ss == '001100100': return [3,day_eng[day.index(list(set(s)&set(day))[0])],time_eng[time.index(list(set(s)&set(time))[0])]]
+    if ss == '000010000' or ss == '000010100': return [4,course_eng[course.index(cc[0])],course_eng[course.index(cc[0])]]
+    if ss == '000011100': return [5,course_eng[course.index(cc[0])],num.index(list(set(s)&num)[0])+1]
+    if ss == '000000100' or ss == '000000001' or ss == '000000101': return [6,6,6]
+    if ss == '000010010': return [7,course_eng[course.index(cc[0])],course_eng[course.index(cc[0])]]
+
+    return [9,9,9]
 
 if __name__ == "__main__":
     main()
