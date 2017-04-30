@@ -36,28 +36,34 @@
             <th>ผู้ลงทะเบียน</th>
             <th></th>
         </tr>
-        {{#each section}}
-            <tr>
-                <td><a href="#" class="course-id" data-course-id="{{course.id}}">{{course.id}}</a></td>
-                <td><a href="#" class="course-id" data-course-id="{{course.id}}">{{course.name}}</a></td>
-                <td>{{section_number}}</td>
-                <td>{{day}} {{time}}</td>
-                <td>{{lecturer}}</td>
-                <td>{{enrolled}}/{{capacity}}</td>
-                <td>
-                    {{#if course.is_enrolled}}
-                    <button type="button" class="btn btn-danger btn-xs withdraw"
-                        data-course-id="{{course.id}}">
-                        ถอนรายวิชา
-                    </button>
-                    {{else}}
-                    <button type="button" class="btn btn-primary btn-xs register"
-                        data-course-id="{{course.id}}" data-section-number="{{section_number}}">
-                        ลงทะเบียน
-                    </button>
-                    {{/if}}
+        {{#if section}}
+            {{#each section}}
+                <tr>
+                    <td><a href="#" class="course-id" data-course-id="{{course.id}}">{{course.id}}</a></td>
+                    <td><a href="#" class="course-id" data-course-id="{{course.id}}">{{course.name}}</a></td>
+                    <td>{{section_number}}</td>
+                    <td>{{day}} {{time}}</td>
+                    <td>{{lecturer}}</td>
+                    <td>{{enrolled}}/{{capacity}}</td>
+                    <td>
+                        {{#if course.is_enrolled}}
+                        <button type="button" class="btn btn-danger btn-xs withdraw"
+                            data-course-id="{{course.id}}">
+                            ถอนรายวิชา
+                        </button>
+                        {{else}}
+                        <button type="button" class="btn btn-primary btn-xs register"
+                            data-course-id="{{course.id}}" data-section-number="{{section_number}}">
+                            ลงทะเบียน
+                        </button>
+                        {{/if}}
+                    </td>
                 </td>
-            </td>
-        {{/each}}
+            {{/each}}
+        {{else}}
+            <tr>
+                <td colspan="7" class="text-center">ไม่พบรายวิชาที่ค้นหา</td>
+            </tr>
+        {{/if}}
     </table>
 </script>
