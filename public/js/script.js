@@ -7,10 +7,12 @@ var currentState = STATE_IDLE;
 var pendingFunction = function() {};
 var pendingParams = null;
 
+var recorder;
 var queryTemplate = function() {};
 
 // main ##########################################################
 $(function() {
+    initAudio();
     initTemplate();
 
     // for sound recording and function execution
@@ -77,21 +79,21 @@ function registerSoundRecordingCommands() {
             currentState = STATE_RECORDING_FUNCTION;
         }
     }
-    var execute = function () {
-        try {
+    var execute = function (soundBlob) {
+        // try {
             $('.recording').addClass('not-rec');
             if (currentState === STATE_RECORDING_FUNCTION)
-                recognizeFunction();
+                recognizeFunction(soundBlob);
             else if (currentState === STATE_RECORDING_CONFIRM)
-                recognizeConfirm(pendingFunction);
-        } catch (e) {
-            alert('อัดเสียงผิดพลาด')
-            currentState = STATE_IDLE;
-        }
+                recognizeConfirm(soundBlob); //, pendingFunction);
+        // } catch (e) {
+        //     alert('อัดเสียงผิดพลาด')
+        //     currentState = STATE_IDLE;
+        // }
     }
 
     $('#record').mousedown(record)
-    $('#record').mouseup(execute)
+    $('#record').mouseup(function () { stopRecording(execute); })
     $(document).keydown(function(e) {
         if (e.keyCode == 32) {
             record();
@@ -99,7 +101,8 @@ function registerSoundRecordingCommands() {
     });
     $(document).keyup(function(e) {
         if (e.keyCode == 32) {
-            execute();
+            stopRecording(execute);
+            // execute();
         }
     });
 }
@@ -107,17 +110,21 @@ function registerSoundRecordingCommands() {
 function startRecording() {
     console.log('recording')
     // TODO implement this
+    record();
 }
 
-function recognizeFunction() {
+function recognizeFunction(soundBlob) {
     console.log('recognizeFunction')
+    var fd = new FormData();
+    fd.append('wavfile', soundBlob, 'sound.wav');
+
     $.ajax({
         url: 'http://localhost:8000/api/recognize/function',
         method: 'post',
-        contentType: 'application/json',
-        data: {
-            file: 'xxx'
-        } // TODO get real file
+        // contentType: 'application/json',
+        data: fd, //{ file: 'xxx' } // TODO get real file
+        processData: false,
+        contentType: false
     }).done(function(data) {
         console.log(data)
         switch (data.functionName) {
@@ -158,15 +165,18 @@ function recognizeFunction() {
     });
 }
 
-function recognizeConfirm() {
+function recognizeConfirm(soundBlob) {
     console.log('recognizeConfirm')
+    var fd = new FormData();
+    fd.append('wavfile', soundBlob, 'sound.wav');
+
     $.ajax({
         url: 'http://localhost:8000/api/recognize/confirm',
         method: 'post',
-        contentType: 'application/json',
-        data: {
-            file: 'xxx'
-        } // TODO get real wav file
+        // contentType: 'application/json',
+        data: fd, //{ file: 'xxx' } // TODO get real file
+        processData: false,
+        contentType: false
     }).done(function(data) {
         if (data.result == 'confirm') {
             pendingFunction(pendingParams);

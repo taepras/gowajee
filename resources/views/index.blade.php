@@ -14,6 +14,8 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js"></script>
+        <script src="/js/recorder/recorder.js"></script>
+        <script src="/js/audioSetup.js"></script>
         <script src="/js/script.js"> </script>
 </head>
 
@@ -40,6 +42,7 @@
             <div class="w3-bar-item">
                 <button class="w3-btn w3-hover-opacity w3-red w3-section w3-round w3-border-bottom w3-border-indigo  w3-layout-cell time" id ="record" >เริ่มการอัดเสียง <i class="fa fa-microphone" style="font-size:25px"></i></button>
             </div>
+            <a href="#" id="save">save</a>
         </div>
 
         <div id="page">
