@@ -191,7 +191,7 @@ function showMainPage() {
 function showAllCourses() {
     console.log('showAllCourses')
     $("#contain").empty();
-    $("#topBar").text("รายวิชาทั้งหมด");
+    $("#topBar").text("ค้นหารายวิชา");
     $.ajax({
         type: "GET",
         url: 'http://localhost:8000/api/courses/all',
@@ -218,7 +218,7 @@ function showEnrolledCourses(shouldSpeak = true) {
         contentType: "application/json",
         success: function(data) {
             console.log(data);
-            $("#contain").html(queryTemplate({ section: data }));
+            $("#contain").html(queryTemplate({ section: data, hideFilter: true }));
             registerListeners();
 
             if(shouldSpeak) {
@@ -246,7 +246,7 @@ function showCourseById(params, shouldSpeak = true) {
             console.log(data);
             var dataFormatted = flipCourseSection([data]);
             console.log(dataFormatted);
-            $("#contain").html(queryTemplate({ section: dataFormatted }));
+            $("#contain").html(queryTemplate({ section: dataFormatted, hideFilter: true }));
             registerListeners();
 
             if(shouldSpeak) {
@@ -272,7 +272,7 @@ function showCoursesByDayTime(params, shouldSpeak = true) {
             console.log(data);
             // var dataFormatted = flipCourseSection(data);
             // console.log(dataFormatted);
-            $("#contain").html(queryTemplate({ section: data }));
+            $("#contain").html(queryTemplate({ section: data, day: day, time: time }));
             registerListeners();
 
             if(shouldSpeak) {

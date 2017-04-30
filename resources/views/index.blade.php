@@ -25,7 +25,7 @@
             </div>
             {{-- <h3 class="w3-bar-item">Menu</h3> --}}
             <a href="#" id="mainPage"  class="w3-bar-item menu">อัดเสียง</a>
-            <a href="#" id="allDisplay" class="w3-bar-item menu">รายวิชาทั้งหมด</a>
+            <a href="#" id="allDisplay" class="w3-bar-item menu">ค้นหารายวิชา</a>
             <a href="#" id="courseDisplay" class="w3-bar-item menu">รายวิชาที่ลงทะเบียน</a>
             {{-- <a href="/logout" class="w3-bar-item menu">ออกจากระบบ</a> --}}
             <a href="#" class="w3-bar-item menu"

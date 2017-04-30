@@ -1,8 +1,9 @@
 <script id="table-template" type="text/x-handlebars-template">
+    {{#unless hideFilter}}
     <form id="filter" class="form-inline">
         <div class="form-group">
             <label>วัน</label>
-            <select class="form-control" id="select-day">
+            <select class="form-control" id="select-day" value="{{day}}">
                 <option></option>
                 <option value="mon">จันทร์</option>
                 <option value="tue">อังคาร</option>
@@ -15,7 +16,7 @@
         </div>
         <div class="form-group">
             <label>เวลา</label>
-            <select class="form-control" id="select-time">
+            <select class="form-control" id="select-time" value="{{time}}">
                 <option></option>
                 <option value="morning">เช้า</option>
                 <option value="afternoon">บ่าย</option>
@@ -24,6 +25,7 @@
         <button type="submit" class="btn btn-primary">กรองผลการค้นหา</button>
     </form>
     <hr>
+    {{/unless}}
     <table class="table">
         <tr>
             <th>รหัสวิชา</th>
