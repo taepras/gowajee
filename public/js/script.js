@@ -53,10 +53,15 @@ function registerListeners () {
 
     $(".register").off();
     $(".register").click(function () {
-        var cid = $(this).data('course-id');
-        var sno = $(this).data('section-number');
-        console.log('1')
+        var cid = '' + $(this).data('course-id');
+        var sno = '' + $(this).data('section-number');
         register({ course: cid, section: sno });
+    });
+
+    $(".withdraw").off();
+    $(".withdraw").click(function () {
+        var cid = '' + $(this).data('course-id');
+        withdraw({ course: cid });
     });
 }
 
@@ -140,6 +145,7 @@ function recognizeFunction() {
         pendingParams = data.params || null;
 
         if (data.needsConfirm) {
+            speak(['are_you_sure'])
             currentState = STATE_WAIT_CONFIRM;
         } else {
             pendingFunction(pendingParams);
@@ -203,7 +209,7 @@ function showAllCourses() {
 
 }
 
-function showEnrolledCourses() {
+function showEnrolledCourses(shouldSpeak = true) {
     $("#contain").empty();
     $("#topBar").text("รายวิชาที่ลงทะเบียน");
     $.ajax({
@@ -215,7 +221,12 @@ function showEnrolledCourses() {
             $("#contain").html(queryTemplate({ section: data }));
             registerListeners();
 
-            speak(getCoursesSpeakList(['registered_list'], data));
+            if(shouldSpeak) {
+                if(data.length > 0)
+                    speak(getCoursesSpeakList(['registered_list'], data));
+                else
+                    speck(['no_courses_registered'])
+            }
         },
         error: function(error) {
             console.log(error);
@@ -223,7 +234,7 @@ function showEnrolledCourses() {
     });
 }
 
-function showCourseById(params) {
+function showCourseById(params, shouldSpeak = true) {
     var id = params.id;
     $("#contain").empty();
     $("#topBar").text("รายวิชา " + id);
@@ -238,7 +249,9 @@ function showCourseById(params) {
             $("#contain").html(queryTemplate({ section: dataFormatted }));
             registerListeners();
 
-            speak(getSectionsSpeakList(['subj/' + data.name, 'available_for_registering', 'num/' + dataFormatted.length, 'sections_namely'], dataFormatted));
+            if(shouldSpeak) {
+                speak(getSectionsSpeakList(['subj/' + data.name, 'available_for_registering', 'num/' + dataFormatted.length, 'sections_namely'], dataFormatted));
+            }
         },
         error: function(error) {
             console.log(error);
@@ -246,7 +259,7 @@ function showCourseById(params) {
     });
 }
 
-function showCoursesByDayTime(params) {
+function showCoursesByDayTime(params, shouldSpeak = true) {
     var day = params.day;
     var time = params.time;
     $("#contain").empty();
@@ -262,10 +275,12 @@ function showCoursesByDayTime(params) {
             $("#contain").html(queryTemplate({ section: data }));
             registerListeners();
 
-            if(data.length > 0)
-                speak(getCoursesSpeakList(['day/' + day, 'time/' + time, 'available_courses', 'num/' + data.length, 'courses_namely'], data));
-            else
-                speak(['no_courses_available_for', 'day/' + day, 'time/' + time]);
+            if(shouldSpeak) {
+                if(data.length > 0)
+                    speak(getCoursesSpeakList(['day/' + day, 'time/' + time, 'available_courses', 'num/' + data.length, 'courses_namely'], data));
+                else
+                    speak(['no_courses_available_for', 'day/' + day, 'time/' + time]);
+            }
         },
         error: function(error) {
             console.log(error);
@@ -273,18 +288,22 @@ function showCoursesByDayTime(params) {
     });
 }
 
-function register(params) {
+function register(params, shouldSpeak = true) {
     console.log('register')
     console.log(params)
     // TODO implement this
     $.ajax({
         url: 'http://localhost:8000/api/courses/',
         method: 'post',
-        contentType: "application/json",
+        // contentType: "application/json",
         data: params
     }).done(function (data) {
         console.log(data)
-        alert('success: ' + data.success)
+        showEnrolledCourses(false);
+        if(shouldSpeak) {
+            if (data.success)
+                speak(['register', 'subj/' + data.section.course.name, 'section', 'num/' + data.section.section_number, 'success']);
+        }
     }).fail(function( jqXHR, textStatus, errorThrown ) {
         console.log(jqXHR)
         console.log(textStatus)
@@ -293,10 +312,27 @@ function register(params) {
     })
 }
 
-function withdraw(params) {
+function withdraw(params, shouldSpeak = true) {
     console.log('withdraw')
     console.log(params)
     // TODO implement this
+    $.ajax({
+        url: 'http://localhost:8000/api/courses',
+        method: 'delete',
+        data: params
+    }).done(function (data) {
+        console.log(data)
+        showEnrolledCourses(false);
+        if(shouldSpeak) {
+            if (data.success)
+                speak(['withdraw', 'subj/' + data.course.name, 'success']);
+        }
+    }).fail(function( jqXHR, textStatus, errorThrown ) {
+        console.log(jqXHR)
+        console.log(textStatus)
+        console.log(errorThrown)
+        alert('withdrawal error: ' + errorThrown)
+    })
 }
 
 

@@ -62,10 +62,13 @@ class CoursesApiController extends Controller
 
         // do enroll
         $section = Section::where('course_id', '=', $courseId)
-            ->where('section_number', '=', $sectionNumber)->get()[0];
+            ->where('section_number', '=', $sectionNumber)->with('course')->get()[0];
         $user->courses()->attach($section->id);
         $user->save();
-        return ['success' => true];
+        return [
+            'success' => true,
+            'section' => $section
+        ];
     }
 
     public function withdraw(Request $request)
@@ -88,12 +91,13 @@ class CoursesApiController extends Controller
             ];
 
         // do withdraw
+        $course = $this->getCourse($courseId);
         $sectionIds = Section::where('course_id', '=', $courseId)
             ->pluck('id')->toArray();
         if (count($sectionIds) <= 0)
             return ['success' => false];
         $user->courses()->detach($sectionIds);
         $user->save();
-        return ['success' => true];
+        return ['success' => true, 'course' => $course];
     }
 }

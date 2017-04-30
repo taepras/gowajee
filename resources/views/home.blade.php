@@ -105,8 +105,8 @@ $(function () {
 function fireAjax(url, method, data = null) {
     console.log(url)
     console.log(method)
-    if (data)
-        data._token = $('input[name=_token]').val();
+    // if (data)
+    //     data._token = $('input[name=_token]').val();
     console.log(data)
     $.ajax({
         url: url,
