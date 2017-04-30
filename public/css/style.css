@@ -4,6 +4,8 @@
 }
 #topBar{
     font-size: 2em;
+    background-color: rgb(165, 231, 247);
+    text-align: left !important;
 }
 #contain {
     padding: 20px;
@@ -26,4 +28,22 @@
     pointer-events: none;
     opacity: 0;
     transform: translateY(-20px);
+}
+
+#sidebar {
+    width: 190px;
+    background-color: rgb(165, 231, 247);
+}
+#page {
+    margin-left: 190px;
+}
+#logo {
+    padding: 8px;
+}
+#logo img {
+    width: 100%;
+}
+.menu {
+    color: #00f !important;
+    text-decoration: underline;
 }

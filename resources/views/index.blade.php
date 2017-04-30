@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-        <title>finalProject</title>
+        <title>โกวาจี</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -19,25 +19,45 @@
 
     <body>
     <div>
-        <div class="w3-sidebar w3-light-grey w3-bar-block" style="width:25%">
-            <h3 class="w3-bar-item">Menu</h3>
-            <a href="#"  id = "mainPage"  class="w3-bar-item w3-button">อัดเสียง</a>
-            <a href="#"  id ="allDisplay" class="w3-bar-item w3-button">รายวิชาทั้งหมด</a>
-            <a href="#" id = "courseDisplay" class="w3-bar-item w3-button">รายวิชาที่ลงทะเบียน</a>
-            <a href="/logout" class="w3-bar-item w3-button">ออกจากระบบ</a>
+        <div class="w3-sidebar w3-bar-block" id="sidebar">
+            <div id="logo">
+                <img src="/image/toplogo01.gif" alt="logo">
+            </div>
+            {{-- <h3 class="w3-bar-item">Menu</h3> --}}
+            <a href="#" id="mainPage"  class="w3-bar-item menu">อัดเสียง</a>
+            <a href="#" id="allDisplay" class="w3-bar-item menu">รายวิชาทั้งหมด</a>
+            <a href="#" id="courseDisplay" class="w3-bar-item menu">รายวิชาที่ลงทะเบียน</a>
+            {{-- <a href="/logout" class="w3-bar-item menu">ออกจากระบบ</a> --}}
+            <a href="#" class="w3-bar-item menu"
+                onclick="event.preventDefault();
+                         document.getElementById('logout-form').submit();">
+                ออกจากระบบ
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+
             <hr>
-            <p>กดปุ่ม Spacebar ค้างไว้เพื่อพูด</p>
+            <p class="w3-bar-item">กดด้านล่าง หรือกดปุ่ม Spacebar ค้างไว้เพื่อพูด</p>
+            <div class="w3-bar-item">
+                <button class="w3-btn w3-hover-opacity w3-red w3-section w3-round w3-border-bottom w3-border-indigo  w3-layout-cell time" id ="record" >เริ่มการอัดเสียง <i class="fa fa-microphone" style="font-size:25px"></i></button>
+            </div>
         </div>
 
-        <div style="margin-left:25%">
-            <div class="w3-container w3-teal w3-center">
-                <div id = "topBar">อัดเสียง</div>
+        <div id="page">
+            <div class="w3-container w3-center" id="topBar">
+                อัดเสียง
             </div>
             <div id ="contain">
                 <div  id="top" class ="w3-center">
                 </div>
 
                 <div id ="mid" class ="w3-center w3-section">
+                    <h1 class="txt-center">
+                    ขณะนี้ท่านได้เข้าสู่ระบบลงทะเบียนเรียนแล้ว
+                    <br>กรุณาเลือกบริการที่ต้องการจากรายการด้านซ้ายมือ
+                    <br>
+                    <br>นิสิตต้องกด <span style="color: #f00">ออกจากระบบ</span> ทุกครั้งที่เสร็จสิ้นการใช้งาน
+                    <br>เพื่อมิให้ผู้อื่นเข้าใช้งาน ในชื่อของท่านได้
+                    </h1>
                     <img id ="mainImage"  src="image/microphone.png">
                 </div>
 
