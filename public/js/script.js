@@ -9,7 +9,7 @@ var pendingParams = null;
 
 var queryTemplate = function() {};
 
-// main ######################################################
+// main ##########################################################
 $(function() {
     initTemplate();
 
@@ -20,6 +20,8 @@ $(function() {
     $("#allDisplay").click(showAllCourses);
     $("#courseDisplay").click(showEnrolledCourses);
     registerListeners();
+
+    speak(['กรุณาพูดใหม่อีกครั้ง']);
 });
 // end main ######################################################
 
@@ -212,6 +214,8 @@ function showEnrolledCourses() {
             console.log(data);
             $("#contain").html(queryTemplate({ section: data }));
             registerListeners();
+
+            speak(getCoursesSpeakList(['registered_list'], data));
         },
         error: function(error) {
             console.log(error);
@@ -233,6 +237,8 @@ function showCourseById(params) {
             console.log(dataFormatted);
             $("#contain").html(queryTemplate({ section: dataFormatted }));
             registerListeners();
+
+            speak(getSectionsSpeakList(['subj/' + data.name, 'available_for_registering', 'num/' + dataFormatted.length, 'sections_namely'], dataFormatted));
         },
         error: function(error) {
             console.log(error);
@@ -255,6 +261,11 @@ function showCoursesByDayTime(params) {
             // console.log(dataFormatted);
             $("#contain").html(queryTemplate({ section: data }));
             registerListeners();
+
+            if(data.length > 0)
+                speak(getCoursesSpeakList(['day/' + day, 'time/' + time, 'available_courses', 'num/' + data.length, 'courses_namely'], data));
+            else
+                speak(['no_courses_available_for', 'day/' + day, 'time/' + time]);
         },
         error: function(error) {
             console.log(error);
@@ -309,6 +320,57 @@ function flipCourseSection (data) {
     return dataFormatted;
 }
 
+function speak(words) {
+    // words = ['register', 'subj/intro_pack', 'section', 'num/one'];
+    audios = [];
+    loadedCount = 0;
+    for (var i = 0; i < words.length; i++) {
+        var audio = new Audio('/tts/' + words[i] + '.wav');
+        audios.push(audio);
+        audio.addEventListener('loadedmetadata', function() {
+            loadedCount++;
+            if (loadedCount >= words.length) {
+                startSpeaking(audios)
+            }
+        });
+    }
+
+}
+
+function startSpeaking(audios) {
+    var accDuration = 0;
+    for (var i = 0; i < audios.length; i++) {
+        delayedSpeak(audios[i], accDuration * 1000);
+        accDuration += audios[i].duration;
+    }
+}
+
+function delayedSpeak(audio, delay) {
+    setTimeout(function(){
+        audio.play();
+    }, delay);
+}
+
+function getCoursesSpeakList(speakList, data) {
+    for (var i = 0; i < data.length; i++) {
+         speakList.push('subj/' + data[i].course.name);
+         speakList.push('section');
+         speakList.push('num/' + data[i].section_number);
+     }
+     return speakList;
+}
+
+function getSectionsSpeakList(speakList, data) {
+    for (var i = 0; i < data.length; i++) {
+        //  speakList.push('subj/' + data[i].course.name);
+         speakList.push('section');
+         speakList.push('num/' + data[i].section_number);
+         speakList.push('study');
+         speakList.push('day/' + data[i].day);
+         speakList.push('time/' + data[i].time);
+     }
+     return speakList;
+}
 
 // $(document).ready(function() {
 //     //แยก user กับ admin
