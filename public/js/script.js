@@ -35,7 +35,7 @@ function registerListeners () {
     $(".course-id").click(function () {
         var id = $(this).data('course-id');
         console.log('1')
-        showCourseById({id: id});
+        showCourseById({course: id});
     });
 
     $('#filter').off();
@@ -65,6 +65,20 @@ function registerListeners () {
     });
 }
 
+function execute (blob) {
+    try {
+        $('.recording').addClass('not-rec');
+        if (currentState === STATE_RECORDING_FUNCTION || currentState === STATE_IDLE)
+            recognizeFunction(blob);
+        else if (currentState === STATE_RECORDING_CONFIRM || currentState === STATE_WAIT_CONFIRM)
+            recognizeConfirm(blob);
+    } catch (e) {
+        alert('อัดเสียงผิดพลาด')
+        currentState = STATE_IDLE;
+    }
+}
+
+
 function registerSoundRecordingCommands() {
     var record = function () {
         $('.recording').removeClass('not-rec');
@@ -75,18 +89,6 @@ function registerSoundRecordingCommands() {
         else if (currentState === STATE_WAIT_CONFIRM) {
             startRecording();
             currentState = STATE_RECORDING_FUNCTION;
-        }
-    }
-    var execute = function () {
-        try {
-            $('.recording').addClass('not-rec');
-            if (currentState === STATE_RECORDING_FUNCTION)
-                recognizeFunction();
-            else if (currentState === STATE_RECORDING_CONFIRM)
-                recognizeConfirm(pendingFunction);
-        } catch (e) {
-            alert('อัดเสียงผิดพลาด')
-            currentState = STATE_IDLE;
         }
     }
 
@@ -109,15 +111,16 @@ function startRecording() {
     // TODO implement this
 }
 
-function recognizeFunction() {
+function recognizeFunction(blob) {
     console.log('recognizeFunction')
+    var fd = new FormData();
+    fd.append('wavfile', blob);
     $.ajax({
         url: 'http://localhost:8000/api/recognize/function',
         method: 'post',
-        contentType: 'application/json',
-        data: {
-            file: 'xxx'
-        } // TODO get real file
+        contentType: false,
+        processData: false,
+        data: fd
     }).done(function(data) {
         console.log(data)
         switch (data.functionName) {
@@ -131,7 +134,7 @@ function recognizeFunction() {
                 pendingFunction = showCourseById;
                 break;
             case 'get_courses_by_time':
-                pendingFunction = showCourses;
+                pendingFunction = showCoursesByDayTime;
                 break;
             case 'register_course':
                 pendingFunction = register;
@@ -158,15 +161,16 @@ function recognizeFunction() {
     });
 }
 
-function recognizeConfirm() {
+function recognizeConfirm(blob) {
     console.log('recognizeConfirm')
+    var fd = new FormData();
+    fd.append('wavfile', blob);
     $.ajax({
         url: 'http://localhost:8000/api/recognize/confirm',
         method: 'post',
-        contentType: 'application/json',
-        data: {
-            file: 'xxx'
-        } // TODO get real wav file
+        contentType: false,
+        processData: false,
+        data: fd
     }).done(function(data) {
         if (data.result == 'confirm') {
             pendingFunction(pendingParams);
@@ -235,7 +239,7 @@ function showEnrolledCourses(shouldSpeak = true) {
 }
 
 function showCourseById(params, shouldSpeak = true) {
-    var id = params.id;
+    var id = params.course;
     $("#contain").empty();
     $("#topBar").text("รายวิชา " + id);
     $.ajax({
