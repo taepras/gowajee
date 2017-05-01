@@ -5,7 +5,6 @@ const STATE_RECORDING_CONFIRM = 3;
 var currentState = STATE_IDLE;
 var pendingFunction = function() {};
 var pendingParams = null;
-
 var queryTemplate = function() {};
 
 // main ##########################################################
@@ -20,7 +19,7 @@ $(function() {
     $("#courseDisplay").click(showEnrolledCourses);
     registerListeners();
 
-    speak(['กรุณาพูดใหม่อีกครั้ง']);
+    //speak(['กรุณาพูดใหม่อีกครั้ง']);
 });
 // end main ######################################################
 
@@ -142,13 +141,44 @@ function recognizeFunction(blob) {
                 pendingFunction = withdraw;
                 break;
         }
-
+        /*
+        ///for test
+        
+        pendingFunction = showCoursesByDayTime; // test function
+        
+        data.needsConfirm = false; 
+        
+        //data.params = {course : "2502390" }; //getCourseByID
+        data.params = {day : "fri",time : "morning"   } ; //getCourseByDayTime
+       
+        data.params = {course:"2604362" ,section : "2"} ; //register
+        data.functionName = 'register_course'; //register
+      
+       
+        data.params = {course:"2313213"} ; //withdraw
+        data.functionName = 'withdraw_course'; //withdraw
+   
+        ///end test
+        */
         // TODO make sure the format is compatible
         pendingParams = data.params || null;
 
         if (data.needsConfirm) {
-            speak(['are_you_sure'])
+            var courseName ="";  
+            if(data.params.course =="0123101") courseName = "PARAGRAP WRITING" ;
+            else if(data.params.course =="2313213") courseName ="DIGITAL PHOTO"  ;
+            else if(data.params.course =="2502390") courseName ="INTRO PACK DESIGN" ;
+            else if(data.params.course =="2604362") courseName = "PERSONAL FINANCE";
+            else if(data.params.course =="3700105") courseName ="FOOD SCI ART" ;
+            else if(data.params.course =="3743422") courseName = "WEIGHT CONTROL";
+            
+            if(data.functionName == 'register_course') {speak(['register', 'subj/' + courseName , 'section', 'num/' + data.params.section ,'are_you_sure']);}
+            else if(data.functionName =='withdraw_course') {speak(['withdraw', 'subj/' + courseName ,'are_you_sure']);} 
+            else {
+                console.log("wrong function");
+            }
             currentState = STATE_WAIT_CONFIRM;
+            
         } else {
             pendingFunction(pendingParams);
             // pendingFunction = function () {};   // reset
@@ -171,18 +201,30 @@ function recognizeConfirm(blob) {
         processData: false,
         data: fd
     }).done(function(data) {
+        // for test
+        //data.result ="confirm";
+        //end test
         if (data.result == 'confirm') {
             pendingFunction(pendingParams);
             currentState = STATE_IDLE;
-        } else if (data.result == 'confirm') {
+        } else if (data.result == 'cancel') {
+            if(pendingFunction === register){
+              speak(['cancel_registering', ]);  
+            }else {
+              speak(['cancel_withdrawing']);    
+            }
             currentState = STATE_IDLE;
-        } else if (data.result == 'confirm') {
+        } else if (data.result == 'unknown') {
             currentState = STATE_WAIT_CONFIRM;
         }
+        
+        
+        
     }).fail(function (j, t, e) {
         alert(e)
         currentState = STATE_IDLE;
     });
+    
 }
 
 
@@ -209,10 +251,11 @@ function showAllCourses() {
             console.log(error);
         }
     });
-
+  
 }
 
-function showEnrolledCourses(shouldSpeak = true) {
+function showEnrolledCourses(params,shouldSpeak = true) {
+    
     $("#contain").empty();
     $("#topBar").text("รายวิชาที่ลงทะเบียน");
     $.ajax({
@@ -302,7 +345,7 @@ function register(params, shouldSpeak = true) {
         data: params
     }).done(function (data) {
         console.log(data)
-        showEnrolledCourses(false);
+        showEnrolledCourses(params, false);
         if(shouldSpeak) {
             if (data.success)
                 speak(['register', 'subj/' + data.section.course.name, 'section', 'num/' + data.section.section_number, 'success']);
@@ -325,7 +368,7 @@ function withdraw(params, shouldSpeak = true) {
         data: params
     }).done(function (data) {
         console.log(data)
-        showEnrolledCourses(false);
+        showEnrolledCourses(params, false);
         if(shouldSpeak) {
             if (data.success)
                 speak(['withdraw', 'subj/' + data.course.name, 'success']);

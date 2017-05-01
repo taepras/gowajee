@@ -44,6 +44,7 @@
                     <button type="submit">upload</button>
                 </form> 
             </div>
+            
         </div>
 
         <div id="page">
@@ -83,6 +84,7 @@
             e.preventDefault();
             console.log('executing...')
             execute($('#wavfile')[0].files[0])
+            console.log(currentState); 
         });
     </script>
 </body>
