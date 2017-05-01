@@ -2,7 +2,6 @@ const STATE_IDLE = 0;
 const STATE_WAIT_CONFIRM = 1;
 const STATE_RECORDING_FUNCTION = 2;
 const STATE_RECORDING_CONFIRM = 3;
-
 var currentState = STATE_IDLE;
 var pendingFunction = function() {};
 var pendingParams = null;
