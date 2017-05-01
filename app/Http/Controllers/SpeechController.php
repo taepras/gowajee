@@ -35,7 +35,7 @@ class SpeechController extends Controller
             } else if($output[1] == 4){ // 4 = what time of subject
                 $out_json['functionName'] = 'get_course_by_id';
                 $out_json['params'] = [];
-                $out_json['params']['subject'] = $output[2]; // subject = digital_photo, food_sci_art, paragraph_writing, weight_control, personal_finance, intro_pack
+                $out_json['params']['course'] = $output[2]; // subject = digital_photo, food_sci_art, paragraph_writing, weight_control, personal_finance, intro_pack
                 $out_json['needsConfirm'] = false;
             } else if($output[1] == 5){ // 5 = register
                 $out_json['functionName'] = 'register_course';
@@ -49,7 +49,7 @@ class SpeechController extends Controller
             } else if($output[1] == 7){ // 7 = withdraw
                 $out_json['functionName'] = 'withdraw_course';
                 $out_json['params'] = [];
-                $out_json['params']['subject'] = $output[2];
+                $out_json['params']['course'] = $output[2];
                 $out_json['needsConfirm'] = true;
             } else if($output[1] == 9){ // 9 = unknow
                 $out_json['needsConfirm'] = false;
