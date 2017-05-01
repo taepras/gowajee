@@ -112,18 +112,20 @@ class SpeechController extends Controller
 
     public function checkResultWav(){
         $data = [];
-        for($i=1;$i<=120;$i++){
+        for($i=1;$i<=10;$i++){
+			if(60<=$i && $i<=99)
+				continue;
             if($i<10)
                 $filename = "00".$i.".wav";
             else if($i<100)
                 $filename = "0".$i.".wav";
             else
                 $filename = $i.".wav";
-            // $data[$i] = $filename;
+            $data[$i]['name'] = $filename;
 
             $output = exec('python ./python/client.py -u ws://localhost:8080/client/ws/speech -r 32000 ./testWav/'.$filename);
             $output = json_decode($output);
-            $data[$i] = $output[0];
+            $data[$i]['data'] = $output[0];
         }
         return $data;
     }

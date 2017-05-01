@@ -134,8 +134,8 @@ def get_task(s):
     course = ['ดิจิตอลโฟโต้', 'ฟูดไซอาร์ท', 'พารากราฟไรติ้ง', 'เวทคอนโทรล', 'เพอร์ซันแนลไฟแนนซ์', 'อินโทรแพค']
 
     day_eng = ['mon','tue','wed','thu','fri']
-    time_eng = ['am','pm']
-    course_eng = ['digital_photo','food_sci_art','paragraph_writing','weight_control','personal_finance','intro_pack']
+    time_eng = ['morning','afternoon']
+    course_eng = ['2313213','3700105','0123101','3743422','2604362','2502390']
 
     task = ['0' for i in range(9)]
     
