@@ -20,27 +20,39 @@ class SpeechController extends Controller
             $out_json = [];
             $out_json['sentence'] = $output[0];
             $out_json['functionName'] = $output[1];
-            if($output[1] == 1 || $output[1] == 2 || $output[1] == 6 || $output[1] == 9){
-                // 1 = confirm, 2 = cancel, 6 = list all registered subject, 9 = unknow
+            if($output[1] == 1){ // 1 = confirm
+                $out_json['functionName'] = 'confirm';
+                $out_json['needsConfirm'] = false;
+            } else if($output[1] == 2){ // 2 = cancel
+                $out_json['functionName'] = 'cancel';
                 $out_json['needsConfirm'] = false;
             } else if($output[1] == 3){ // 3 = find subject from time
+                $out_json['functionName'] = 'get_courses_by_time';
                 $out_json['params'] = [];
                 $out_json['params']['day'] = $output[2]; // day = mon,tue,wed,thu,fri
                 $out_json['params']['time'] = $output[3]; // time = am,pm
                 $out_json['needsConfirm'] = false;
             } else if($output[1] == 4){ // 4 = what time of subject
+                $out_json['functionName'] = 'get_course_by_id';
                 $out_json['params'] = [];
                 $out_json['params']['subject'] = $output[2]; // subject = digital_photo, food_sci_art, paragraph_writing, weight_control, personal_finance, intro_pack
                 $out_json['needsConfirm'] = false;
-            } else if($output[1] == 5){
+            } else if($output[1] == 5){ // 5 = register
+                $out_json['functionName'] = 'register_course';
                 $out_json['params'] = [];
                 $out_json['params']['day'] = $output[2];
                 $out_json['params']['section'] = $output[3]; // section = 1,2,...,10
+                $out_json['needsConfirm'] = true;
+            } else if($output[1] == 6){ // 6 = list all registered subject
+                $out_json['functionName'] = 'get_enrolled_courses';
                 $out_json['needsConfirm'] = false;
-            } else if($output[1] == 7){
+            } else if($output[1] == 7){ // 7 = withdraw
+                $out_json['functionName'] = 'withdraw_course';
                 $out_json['params'] = [];
                 $out_json['params']['subject'] = $output[2];
                 $out_json['needsConfirm'] = true;
+            } else if($output[1] == 9){ // 9 = unknow
+                $out_json['needsConfirm'] = false;
             } else{
                 $out_json['needsConfirm'] = false;
             }
