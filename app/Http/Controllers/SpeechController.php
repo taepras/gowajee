@@ -110,6 +110,24 @@ class SpeechController extends Controller
         return 'Not have file.';
     }
 
+    public function checkResultWav(){
+        $data = [];
+        for($i=1;$i<=120;$i++){
+            if($i<10)
+                $filename = "00".$i.".wav";
+            else if($i<100)
+                $filename = "0".$i.".wav";
+            else
+                $filename = $i.".wav";
+            // $data[$i] = $filename;
+
+            $output = exec('python ./python/client.py -u ws://localhost:8080/client/ws/speech -r 32000 ./testWav/'.$filename);
+            $output = json_decode($output);
+            $data[$i] = $output[0];
+        }
+        return $data;
+    }
+
     /**
      * Display a listing of the resource.
      *

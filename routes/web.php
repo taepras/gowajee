@@ -32,3 +32,4 @@ Route::delete('/api/courses', 'CoursesApiController@withdraw');
 Route::post('/api/recognize/function', 'SpeechController@chooseFunction');
 Route::post('/api/recognize/confirm', 'SpeechController@confirm');
 Route::get('/uploadWav', 'SpeechController@uploadWav');
+Route::get('/checkResultWav', 'SpeechController@checkResultWav');
