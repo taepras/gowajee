@@ -17,7 +17,34 @@ class SpeechController extends Controller
             // $output = exec('python ./python/client.py -u ws://192.168.99.100:8080/client/ws/speech -r 32000 ./wav/'.$filename);
             $output = exec('python ./python/client.py -u ws://localhost:8080/client/ws/speech -r 32000 ./wav/'.$filename);
             $output = json_decode($output);
-            return $output;
+            // return $output;
+            $out_json = [];
+            $out_json['sentence'] = $output[0];
+            $out_json['functionName'] = $output[1];
+            if($output[1] == 1 || $output[1] == 2 || $output[1] == 6 || $output[1] == 9){
+                $out_json['needsConfirm'] = false;
+            } else if($output[1] == 3){
+                $out_json['params'] = [];
+                $out_json['params']['day'] = $output[2];
+                $out_json['params']['time'] = $output[3];
+                $out_json['needsConfirm'] = false;
+            } else if($output[1] == 4){
+                $out_json['params'] = [];
+                $out_json['params']['subject'] = $output[2];
+                $out_json['needsConfirm'] = false;
+            } else if($output[1] == 5){
+                $out_json['params'] = [];
+                $out_json['params']['day'] = $output[2];
+                $out_json['params']['section'] = $output[3];
+                $out_json['needsConfirm'] = false;
+            } else if($output[1] == 7){
+                $out_json['params'] = [];
+                $out_json['params']['subject'] = $output[2];
+                $out_json['needsConfirm'] = true;
+            } else{
+                $out_json['needsConfirm'] = false;
+            }
+            return $out_json;
             // return response()->json($output);
             // return $filename;
         }
@@ -56,9 +83,20 @@ class SpeechController extends Controller
             $filename = $file->getClientOriginalName();
             $file->move(base_path().'/public/wav/',$filename);
 
-            $output = exec('python ./python/clientConfirm.py -u ws://localhost:8080/client/ws/speech -r 32000 ./wav/'.$filename);
+            // $output = exec('python ./python/client.py -u ws://192.168.99.100:8080/client/ws/speech -r 32000 ./wav/'.$filename);
+            $output = exec('python ./python/client.py -u ws://localhost:8080/client/ws/speech -r 32000 ./wav/'.$filename);
             $output = json_decode($output);
-            return $output;
+            // return $output;
+            $out_json = [];
+            // $out_json['sentence'] = $output[0];
+            if($output[1] == 1){
+                $out_json['result'] = "confirm";
+            } else if($output[1] == 2){
+                $out_json['result'] = "cancel";
+            } else{
+                $out_json['result'] = "unknown";
+            }
+            return $out_json;
         }
         return 'Not have file.';
     }
