@@ -41,7 +41,7 @@ class SpeechController extends Controller
                 $out_json['functionName'] = 'register_course';
                 $out_json['params'] = [];
                 $out_json['params']['day'] = $output[2];
-                $out_json['params']['section'] = $output[3]; // section = 1,2,...,10
+                $out_json['params']['section'] = (string) $output[3]; // section = 1,2,...,10
                 $out_json['needsConfirm'] = true;
             } else if($output[1] == 6){ // 6 = list all registered subject
                 $out_json['functionName'] = 'get_enrolled_courses';

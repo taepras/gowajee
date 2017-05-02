@@ -62,7 +62,7 @@ function stopRecording(callback) {
     });
 }
 
-function record( e ) {
+function doRecord( e ) {
     if (!audioRecorder)
         return;
     audioRecorder.clear();
@@ -137,11 +137,11 @@ function toggleMono() {
 }
 
 function gotStream(stream) {
-    inputPoint = audioContext.createGain();
-
     // Create an AudioNode from the stream.
     realAudioInput = audioContext.createMediaStreamSource(stream);
     audioInput = realAudioInput;
+
+    inputPoint = audioContext.createGain();
     audioInput.connect(inputPoint);
 
 //    audioInput = convertToMono( input );

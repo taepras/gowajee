@@ -2,6 +2,8 @@ const STATE_IDLE = 0;
 const STATE_WAIT_CONFIRM = 1;
 const STATE_RECORDING_FUNCTION = 2;
 const STATE_RECORDING_CONFIRM = 3;
+const STATE_RECOGNIZING_FUNCTION = 4;
+const STATE_RECOGNIZING_CONFIRM = 5;
 
 var currentState = STATE_IDLE;
 var pendingFunction = function() {};
@@ -31,12 +33,14 @@ function initTemplate() {
     queryTemplate = Handlebars.compile(source);
 }
 
-function registerListeners () {
+function registerListeners() {
     $(".course-id").off();
-    $(".course-id").click(function () {
+    $(".course-id").click(function() {
         var id = $(this).data('course-id');
         console.log('1')
-        showCourseById({course: id});
+        showCourseById({
+            course: id
+        });
     });
 
     $('#filter').off();
@@ -44,57 +48,111 @@ function registerListeners () {
         e.preventDefault();
         var day = $('#select-day').val();
         var time = $('#select-time').val();
-        console.log(day,time)
+        console.log(day, time)
         if (day && time) {
-            showCoursesByDayTime({ day: day, time: time });
+            showCoursesByDayTime({
+                day: day,
+                time: time
+            });
         } else {
             alert('กรุณากรอกข้อมูลให้รครบถ้วน')
         }
     });
 
     $(".register").off();
-    $(".register").click(function () {
+    $(".register").click(function() {
         var cid = '' + $(this).data('course-id');
         var sno = '' + $(this).data('section-number');
-        register({ course: cid, section: sno });
+        register({
+            course: cid,
+            section: sno
+        });
     });
 
     $(".withdraw").off();
-    $(".withdraw").click(function () {
+    $(".withdraw").click(function() {
         var cid = '' + $(this).data('course-id');
-        withdraw({ course: cid });
+        withdraw({
+            course: cid
+        });
     });
 }
 
-function execute (blob) {
-    try {
-        $('.recording').addClass('not-rec');
-        if (currentState === STATE_RECORDING_FUNCTION || currentState === STATE_IDLE)
-            recognizeFunction(blob);
-        else if (currentState === STATE_RECORDING_CONFIRM || currentState === STATE_WAIT_CONFIRM)
-            recognizeConfirm(blob);
-    } catch (e) {
-        alert('อัดเสียงผิดพลาด')
-        currentState = STATE_IDLE;
+function setState(nextState) {
+    console.log('changing from state', currentState, 'to', nextState)
+    if (currentState === nextState) {
+        return;
+    }
+    else if (currentState === STATE_IDLE) {
+        if (nextState === STATE_RECORDING_FUNCTION) {
+            $('.recording').removeClass('not-rec');
+        } else return;
+    }
+     else if (currentState === STATE_RECORDING_FUNCTION) {
+        if (nextState === STATE_RECOGNIZING_FUNCTION) {
+            // TODO show loader
+        } else return;
+    }
+    else if (currentState === STATE_RECOGNIZING_FUNCTION) {
+        if (nextState === STATE_IDLE) {
+            $('.recording').addClass('not-rec');
+        } else if (nextState === STATE_WAIT_CONFIRM) {
+            // TODO show text status of confirmation
+        } else return;
+    }
+    else if (currentState === STATE_WAIT_CONFIRM) {
+        if (nextState === STATE_RECORDING_CONFIRM) {
+            // no action
+        } else if (nextState === STATE_IDLE) {
+            $('.recording').addClass('not-rec');
+        } else return;
+    }
+    else if (currentState === STATE_RECORDING_CONFIRM) {
+        if (nextState === STATE_RECOGNIZING_CONFIRM) {
+            // TODO show loader
+        } else return;
+    }
+    else if (currentState === STATE_RECOGNIZING_CONFIRM) {
+        if (nextState === STATE_IDLE) {
+            $('.recording').addClass('not-rec');
+        } else return;
+    }
+    else {
+        return;
+    }
+    currentState = nextState;
+}
+
+function execute(blob) {
+    // try {
+    if (currentState === STATE_RECORDING_FUNCTION || currentState === STATE_IDLE) {
+        setState(STATE_RECOGNIZING_FUNCTION);
+        recognizeFunction(blob);
+    } else if (currentState === STATE_RECORDING_CONFIRM || currentState === STATE_WAIT_CONFIRM) {
+        setState(STATE_RECOGNIZING_CONFIRM);
+        recognizeConfirm(blob);
+    }
+    // } catch (e) {
+    //     alert('อัดเสียงผิดพลาด')
+    //     setState(STATE_IDLE);
+    // }
+}
+
+function record() {
+    if (currentState === STATE_IDLE) {
+        startRecording();
+        setState(STATE_RECORDING_FUNCTION);
+    } else if (currentState === STATE_WAIT_CONFIRM) {
+        startRecording();
+        setState(STATE_RECORDING_CONFIRM);
     }
 }
 
-
 function registerSoundRecordingCommands() {
-    var record = function () {
-        $('.recording').removeClass('not-rec');
-        if (currentState === STATE_IDLE) {
-            startRecording();
-            currentState = STATE_RECORDING_FUNCTION;
-        }
-        else if (currentState === STATE_WAIT_CONFIRM) {
-            startRecording();
-            currentState = STATE_RECORDING_FUNCTION;
-        }
-    }
-
     $('#record').mousedown(record)
-    $('#record').mouseup(function () { stopRecording(execute); })
+    $('#record').mouseup(function() {
+        stopRecording(execute);
+    })
     $(document).keydown(function(e) {
         if (e.keyCode == 32) {
             record();
@@ -103,16 +161,16 @@ function registerSoundRecordingCommands() {
     $(document).keyup(function(e) {
         if (e.keyCode == 32) {
             stopRecording(execute);
-            // execute();
         }
     });
 }
 
 function startRecording() {
     console.log('recording')
-    // TODO implement this
-    record();
+    doRecord();
 }
+
+
 
 function recognizeFunction(blob) {
     console.log('recognizeFunction')
@@ -126,6 +184,23 @@ function recognizeFunction(blob) {
         data: formData
     }).done(function(data) {
         console.log(data)
+
+        ////for test
+
+        // pendingFunction = showCoursesByDayTime; // test function
+        // data.needsConfirm = true;
+        //
+        // data.functionName = 'get_course_by_id'; //register
+        // data.params = {course : "2502390"}; //getCourseByID
+        // data.params = {day : "fri",time : "morning"   } ; //getCourseByDayTime
+
+        // data.params = {course:"2604362" ,section : "2"} ; //register
+
+        // data.params = {course:"2313213"} ; //withdraw
+        // data.functionName = 'withdraw_course'; //withdraw
+
+        ////end test
+
         switch (data.functionName) {
             case 'get_all_courses':
                 pendingFunction = showAllCourses;
@@ -146,52 +221,36 @@ function recognizeFunction(blob) {
                 pendingFunction = withdraw;
                 break;
         }
-        /*
-        ///for test
 
-        pendingFunction = showCoursesByDayTime; // test function
-
-        data.needsConfirm = false;
-
-        //data.params = {course : "2502390" }; //getCourseByID
-        data.params = {day : "fri",time : "morning"   } ; //getCourseByDayTime
-
-        data.params = {course:"2604362" ,section : "2"} ; //register
-        data.functionName = 'register_course'; //register
-
-
-        data.params = {course:"2313213"} ; //withdraw
-        data.functionName = 'withdraw_course'; //withdraw
-
-        ///end test
-        */
         // TODO make sure the format is compatible
         pendingParams = data.params || null;
 
         if (data.needsConfirm) {
-            var courseName ="";
-            if(data.params.course =="0123101") courseName = "PARAGRAP WRITING" ;
-            else if(data.params.course =="2313213") courseName ="DIGITAL PHOTO"  ;
-            else if(data.params.course =="2502390") courseName ="INTRO PACK DESIGN" ;
-            else if(data.params.course =="2604362") courseName = "PERSONAL FINANCE";
-            else if(data.params.course =="3700105") courseName ="FOOD SCI ART" ;
-            else if(data.params.course =="3743422") courseName = "WEIGHT CONTROL";
+            var courseName = "";
+            if (data.params.course == "0123101") courseName = "PARAGRAP WRITING";
+            else if (data.params.course == "2313213") courseName = "DIGITAL PHOTO";
+            else if (data.params.course == "2502390") courseName = "INTRO PACK DESIGN";
+            else if (data.params.course == "2604362") courseName = "PERSONAL FINANCE";
+            else if (data.params.course == "3700105") courseName = "FOOD SCI ART";
+            else if (data.params.course == "3743422") courseName = "WEIGHT CONTROL";
 
-            if(data.functionName == 'register_course') {speak(['register', 'subj/' + courseName , 'section', 'num/' + data.params.section ,'are_you_sure']);}
-            else if(data.functionName =='withdraw_course') {speak(['withdraw', 'subj/' + courseName ,'are_you_sure']);}
-            else {
+            if (data.functionName == 'register_course') {
+                speak(['register', 'subj/' + courseName, 'section', 'num/' + data.params.section, 'are_you_sure']);
+            } else if (data.functionName == 'withdraw_course') {
+                speak(['withdraw', 'subj/' + courseName, 'are_you_sure']);
+            } else {
                 console.log("wrong function");
             }
-            currentState = STATE_WAIT_CONFIRM;
+            setState(STATE_WAIT_CONFIRM);
 
         } else {
             pendingFunction(pendingParams);
             // pendingFunction = function () {};   // reset
-            currentState = STATE_IDLE;
+            setState(STATE_IDLE);
         }
-    }).fail(function (j, t, e) {
+    }).fail(function(j, t, e) {
         alert(e)
-        currentState = STATE_IDLE;
+        setState(STATE_IDLE);
     });
 }
 
@@ -206,30 +265,26 @@ function recognizeConfirm(blob) {
         processData: false,
         data: formData
     }).done(function(data) {
-        // for test
-        //data.result ="confirm";
-        //end test
+        // // for test
+        // data.result = 'confirm';
+        // // end test
         if (data.result == 'confirm') {
             pendingFunction(pendingParams);
-            currentState = STATE_IDLE;
+            setState(STATE_IDLE);
         } else if (data.result == 'cancel') {
-            if(pendingFunction === register){
-              speak(['cancel_registering', ]);
-            }else {
-              speak(['cancel_withdrawing']);
+            if (pendingFunction === register) {
+                speak(['cancel_registering', ]);
+            } else {
+                speak(['cancel_withdrawing']);
             }
-            currentState = STATE_IDLE;
-        } else if (data.result == 'unknown') {
-            currentState = STATE_WAIT_CONFIRM;
+            setState(STATE_IDLE);
+        } else { // if (data.result == 'unknown') {
+            setState(STATE_WAIT_CONFIRM);
         }
-
-
-
-    }).fail(function (j, t, e) {
+    }).fail(function(j, t, e) {
         alert(e)
-        currentState = STATE_IDLE;
+        setState(STATE_IDLE);
     });
-
 }
 
 
@@ -249,7 +304,9 @@ function showAllCourses() {
         success: function(data) {
             console.log(data);
             var dataFormatted = flipCourseSection(data);
-            $("#contain").html(queryTemplate({ section: dataFormatted }));
+            $("#contain").html(queryTemplate({
+                section: dataFormatted
+            }));
             registerListeners();
         },
         error: function(error) {
@@ -259,7 +316,7 @@ function showAllCourses() {
 
 }
 
-function showEnrolledCourses(params,shouldSpeak = true) {
+function showEnrolledCourses(params, shouldSpeak = true) {
 
     $("#contain").empty();
     $("#topBar").text("รายวิชาที่ลงทะเบียน");
@@ -269,11 +326,14 @@ function showEnrolledCourses(params,shouldSpeak = true) {
         contentType: "application/json",
         success: function(data) {
             console.log(data);
-            $("#contain").html(queryTemplate({ section: data, hideFilter: true }));
+            $("#contain").html(queryTemplate({
+                section: data,
+                hideFilter: true
+            }));
             registerListeners();
 
-            if(shouldSpeak) {
-                if(data.length > 0)
+            if (shouldSpeak) {
+                if (data.length > 0)
                     speak(getCoursesSpeakList(['registered_list'], data));
                 else
                     speck(['no_courses_registered'])
@@ -297,10 +357,13 @@ function showCourseById(params, shouldSpeak = true) {
             console.log(data);
             var dataFormatted = flipCourseSection([data]);
             console.log(dataFormatted);
-            $("#contain").html(queryTemplate({ section: dataFormatted, hideFilter: true }));
+            $("#contain").html(queryTemplate({
+                section: dataFormatted,
+                hideFilter: true
+            }));
             registerListeners();
 
-            if(shouldSpeak) {
+            if (shouldSpeak) {
                 speak(getSectionsSpeakList(['subj/' + data.name, 'available_for_registering', 'num/' + dataFormatted.length, 'sections_namely'], dataFormatted));
             }
         },
@@ -323,11 +386,15 @@ function showCoursesByDayTime(params, shouldSpeak = true) {
             console.log(data);
             // var dataFormatted = flipCourseSection(data);
             // console.log(dataFormatted);
-            $("#contain").html(queryTemplate({ section: data, day: day, time: time }));
+            $("#contain").html(queryTemplate({
+                section: data,
+                day: day,
+                time: time
+            }));
             registerListeners();
 
-            if(shouldSpeak) {
-                if(data.length > 0)
+            if (shouldSpeak) {
+                if (data.length > 0)
                     speak(getCoursesSpeakList(['day/' + day, 'time/' + time, 'available_courses', 'num/' + data.length, 'courses_namely'], data));
                 else
                     speak(['no_courses_available_for', 'day/' + day, 'time/' + time]);
@@ -342,20 +409,19 @@ function showCoursesByDayTime(params, shouldSpeak = true) {
 function register(params, shouldSpeak = true) {
     console.log('register')
     console.log(params)
-    // TODO implement this
     $.ajax({
         url: 'http://localhost:8000/api/courses/',
         method: 'post',
         // contentType: "application/json",
         data: params
-    }).done(function (data) {
+    }).done(function(data) {
         console.log(data)
         showEnrolledCourses(params, false);
-        if(shouldSpeak) {
+        if (shouldSpeak) {
             if (data.success)
                 speak(['register', 'subj/' + data.section.course.name, 'section', 'num/' + data.section.section_number, 'success']);
         }
-    }).fail(function( jqXHR, textStatus, errorThrown ) {
+    }).fail(function(jqXHR, textStatus, errorThrown) {
         console.log(jqXHR)
         console.log(textStatus)
         console.log(errorThrown)
@@ -366,19 +432,18 @@ function register(params, shouldSpeak = true) {
 function withdraw(params, shouldSpeak = true) {
     console.log('withdraw')
     console.log(params)
-    // TODO implement this
     $.ajax({
         url: 'http://localhost:8000/api/courses',
         method: 'delete',
         data: params
-    }).done(function (data) {
+    }).done(function(data) {
         console.log(data)
         showEnrolledCourses(params, false);
-        if(shouldSpeak) {
+        if (shouldSpeak) {
             if (data.success)
                 speak(['withdraw', 'subj/' + data.course.name, 'success']);
         }
-    }).fail(function( jqXHR, textStatus, errorThrown ) {
+    }).fail(function(jqXHR, textStatus, errorThrown) {
         console.log(jqXHR)
         console.log(textStatus)
         console.log(errorThrown)
@@ -390,12 +455,12 @@ function withdraw(params, shouldSpeak = true) {
 
 // misc
 
-function flipCourseSection (data) {
+function flipCourseSection(data) {
     // flip course-section inside-out to make section-course structure
     var dataFormatted = [];
     for (var i = 0; i < data.length; i++) {
         var courseInfo = data[i];
-        for(var j = 0; j < data[i].sections.length; j++) {
+        for (var j = 0; j < data[i].sections.length; j++) {
             var section = data[i].sections[j];
             section.course = courseInfo;
             dataFormatted.push(section);
@@ -430,30 +495,30 @@ function startSpeaking(audios, rate) {
 }
 
 function delayedSpeak(audio, delay) {
-    setTimeout(function(){
+    setTimeout(function() {
         audio.play();
     }, delay);
 }
 
 function getCoursesSpeakList(speakList, data) {
     for (var i = 0; i < data.length; i++) {
-         speakList.push('subj/' + data[i].course.name);
-         speakList.push('section');
-         speakList.push('num/' + data[i].section_number);
-     }
-     return speakList;
+        speakList.push('subj/' + data[i].course.name);
+        speakList.push('section');
+        speakList.push('num/' + data[i].section_number);
+    }
+    return speakList;
 }
 
 function getSectionsSpeakList(speakList, data) {
     for (var i = 0; i < data.length; i++) {
         //  speakList.push('subj/' + data[i].course.name);
-         speakList.push('section');
-         speakList.push('num/' + data[i].section_number);
-         speakList.push('study');
-         speakList.push('day/' + data[i].day);
-         speakList.push('time/' + data[i].time);
-     }
-     return speakList;
+        speakList.push('section');
+        speakList.push('num/' + data[i].section_number);
+        speakList.push('study');
+        speakList.push('day/' + data[i].day);
+        speakList.push('time/' + data[i].time);
+    }
+    return speakList;
 }
 
 // $(document).ready(function() {
