@@ -40,7 +40,7 @@ class SpeechController extends Controller
             } else if($output[1] == 5){ // 5 = register
                 $out_json['functionName'] = 'register_course';
                 $out_json['params'] = [];
-                $out_json['params']['day'] = $output[2];
+                $out_json['params']['course'] = $output[2];
                 $out_json['params']['section'] = (string) $output[3]; // section = 1,2,...,10
                 $out_json['needsConfirm'] = true;
             } else if($output[1] == 6){ // 6 = list all registered subject
