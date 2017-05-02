@@ -14,6 +14,8 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js"></script>
+        <script src="/js/recorder/recorder.js"></script>
+        <script src="/js/audioSetup.js"></script>
         <script src="/js/script.js"> </script>
 </head>
 
@@ -42,7 +44,7 @@
                 <form id="uploadForm" enctype="multipart/form-data">
                     <input type="file" name="wavfile" id="wavfile">
                     <button type="submit">upload</button>
-                </form> 
+                </form>
             </div>
         </div>
 
@@ -83,6 +85,7 @@
             e.preventDefault();
             console.log('executing...')
             execute($('#wavfile')[0].files[0])
+            console.log(currentState);
         });
     </script>
 </body>
