@@ -15,7 +15,7 @@ class SpeechController extends Controller
             $file->move(base_path().'/public/wav/',$filename);
 
             // $output = exec('python ./python/client.py -u ws://192.168.99.100:8080/client/ws/speech -r 32000 ./wav/'.$filename);
-            $output = exec('python3 ./python/client.py -u ws://localhost:8080/client/ws/speech -r 512000 ./wav/'.$filename);
+            $output = exec('python ./python/client.py -u ws://localhost:8080/client/ws/speech -r 1024000 ./wav/'.$filename);
             $output = json_decode($output);
             $out_json = [];
             $out_json['sentence'] = $output[0];
