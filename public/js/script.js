@@ -23,10 +23,31 @@ $(function() {
     $("#allDisplay").click(showAllCourses);
     $("#courseDisplay").click(showEnrolledCourses);
     registerListeners();
-
+    uploadButton();
+    
     //speak(['กรุณาพูดใหม่อีกครั้ง']);
 });
 // end main ######################################################
+
+function uploadButton(){
+    $("input[type=file]").change(function(){
+        //left bar
+        var file_name = $('#wavfile').val();
+        if(file_name!=""){
+        var file_name_index = file_name.lastIndexOf("\\") + 1;
+        file_name = file_name.substring(file_name_index, file_name.length);
+        $("#showInput").attr("placeholder", file_name); 
+        }
+        //show when confirm    
+        file_name = $('#wavfile2').val();    
+        if(file_name!=""){
+        var file_name_index = file_name.lastIndexOf("\\") + 1;
+        file_name = file_name.substring(file_name_index, file_name.length);    
+        $("#showInput2").attr("placeholder", file_name);         
+        }
+        
+    });   
+}
 
 function initTemplate() {
     var source = $('#table-template').html();
@@ -86,33 +107,42 @@ function setState(nextState) {
     else if (currentState === STATE_IDLE) {
         if (nextState === STATE_RECORDING_FUNCTION) {
             $('.recording').removeClass('not-rec');
+        } else if(nextState === STATE_RECOGNIZING_FUNCTION   ){
+            
         } else return;
     }
      else if (currentState === STATE_RECORDING_FUNCTION) {
         if (nextState === STATE_RECOGNIZING_FUNCTION) {
-            // TODO show loader
+            $("#ajaxBusy").show();
         } else return;
     }
     else if (currentState === STATE_RECOGNIZING_FUNCTION) {
+        $("#ajaxBusy").hide();
         if (nextState === STATE_IDLE) {
             $('.recording').addClass('not-rec');
+            
         } else if (nextState === STATE_WAIT_CONFIRM) {
-            // TODO show text status of confirmation
+            $("#confirm").show();
+            
+         
         } else return;
     }
     else if (currentState === STATE_WAIT_CONFIRM) {
         if (nextState === STATE_RECORDING_CONFIRM) {
+            $("#confirm").hide();
             // no action
         } else if (nextState === STATE_IDLE) {
+            $("#confirm").hide();
             $('.recording').addClass('not-rec');
         } else return;
     }
     else if (currentState === STATE_RECORDING_CONFIRM) {
         if (nextState === STATE_RECOGNIZING_CONFIRM) {
-            // TODO show loader
+           $("#ajaxBusy").show();
         } else return;
     }
     else if (currentState === STATE_RECOGNIZING_CONFIRM) {
+        $("#ajaxBusy").hide();
         if (nextState === STATE_IDLE) {
             $('.recording').addClass('not-rec');
         } else return;
@@ -127,6 +157,7 @@ function execute(blob) {
     // try {
     if (currentState === STATE_RECORDING_FUNCTION || currentState === STATE_IDLE) {
         setState(STATE_RECOGNIZING_FUNCTION);
+        console.log("before function: "+currentState);
         recognizeFunction(blob);
     } else if (currentState === STATE_RECORDING_CONFIRM || currentState === STATE_WAIT_CONFIRM) {
         setState(STATE_RECOGNIZING_CONFIRM);
@@ -185,22 +216,25 @@ function recognizeFunction(blob) {
     }).done(function(data) {
         console.log(data)
 
-        ////for test
+        //for test
 
         // pendingFunction = showCoursesByDayTime; // test function
-        // data.needsConfirm = true;
+        //data.needsConfirm = true;
+       // data.sentence ="teststttts"
         //
         // data.functionName = 'get_course_by_id'; //register
         // data.params = {course : "2502390"}; //getCourseByID
         // data.params = {day : "fri",time : "morning"   } ; //getCourseByDayTime
 
-        // data.params = {course:"2604362" ,section : "2"} ; //register
+        //data.params = {course:"2604362" ,section : "2"} ; //register
+        //data.functionName = 'register_course'    
+       
+         //data.params = {course:"2313213"} ; //withdraw
+         //data.functionName = 'withdraw_course'; //withdraw
 
-        // data.params = {course:"2313213"} ; //withdraw
-        // data.functionName = 'withdraw_course'; //withdraw
-
-        ////end test
-
+        //end test
+        $("#confirmFunc").text(data.sentence); 
+        $("#lastReg").text("ผลการ Recognition ล่าสุด : "+data.sentence); 
         switch (data.functionName) {
             case 'get_all_courses':
                 pendingFunction = showAllCourses;
@@ -245,7 +279,7 @@ function recognizeFunction(blob) {
                 console.log("wrong function");
             }
             setState(STATE_WAIT_CONFIRM);
-
+            console.log("check :"+currentState);
         } else {
             pendingFunction(pendingParams);
             setState(STATE_IDLE);
@@ -268,9 +302,11 @@ function recognizeConfirm(blob) {
         data: formData
     }).done(function(data) {
         // // for test
-        // data.result = 'confirm';
+         //data.result = 'confirm';
         // // end test
+        $("#confirmFunc").text(data.sentence); 
         if (data.result == 'confirm') {
+            console.log("pass");
             pendingFunction(pendingParams);
             setState(STATE_IDLE);
         } else if (data.result == 'cancel') {
@@ -282,8 +318,10 @@ function recognizeConfirm(blob) {
             setState(STATE_IDLE);
         } else { // if (data.result == 'unknown') {
             setState(STATE_WAIT_CONFIRM);
+            
         }
     }).fail(function(j, t, e) {
+        console.log("pass2");
         alert(e)
         setState(STATE_IDLE);
     });
