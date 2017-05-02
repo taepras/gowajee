@@ -54,9 +54,10 @@
         </div>
 
         <div id="page">
-            <div class="w3-container w3-center" id="topBar">
+            <div class="w3-container w3-center"  id="topBar">
                 เข้าสู่ระบบลงทะเบียนเรียน
             </div>
+            <div id ="lastReg" style="float:right;">ผลการ Recognition ล่าสุด : none </div>
             <div id ="contain">
                 <div  id="top" class ="w3-center">
                 </div>
@@ -76,7 +77,7 @@
                 </div>
 
                 <div id ="bottom" class ="w3-center">
-                    {{-- <button class="w3-btn w3-hover-opacity w3-indigo w3-section w3-round w3-border-bottom w3-border-indigo  w3-layout-cell time" id ="record" >เริ่มการอัดเสียง <i class="fa fa-microphone" style="font-size:25px"></i></button> --}}
+                    {{-- <button class="w3-btn w3-hover-opacity w3-indigo w3-section w3-round w3-border-bottom w3-border-indigo  w3-layout-cell time"  >เริ่มการอัดเสียง <i class="fa fa-microphone" style="font-size:25px"></i></button> --}}
                 </div>
             </div>
         </div>
@@ -90,7 +91,7 @@
             e.preventDefault();
             console.log('executing...')
             execute($('#wavfile')[0].files[0])
-            //console.log(currentState);
+            console.log("state onclick :"+currentState);
         });
     </script>
 
@@ -102,7 +103,7 @@
             <p class="w3-center">กดด้านล่าง หรือกดปุ่ม Spacebar ค้างไว้เพื่อพูด</p>
             <div class="w3-row ">
                 <div class ="w3-container w3-center w3-half">
-                <button class="w3-btn w3-hover-opacity w3-red w3-section w3-round w3-border-bottom w3-border-indigo  w3-layout-cell time action-button" id ="record" >กดเพื่อพูด <i class="fa fa-microphone" style="font-size:25px"></i></button>
+                <button class="w3-btn w3-hover-opacity w3-red w3-section w3-round w3-border-bottom w3-border-indigo  w3-layout-cell time action-button" id ="record2" >กดเพื่อพูด <i class="fa fa-microphone" style="font-size:25px"></i></button>
                 </div>
                 <div class ="w3-container w3-half w3-center">
                 <!-- <input class="" id = "showInput2" type="text" placeholder="No file choosen" readonly> -->
@@ -137,11 +138,14 @@
         <div style="width: 400px; margin: auto; background-color: white; position: relative; top: calc(50% - 100px); padding: 24px; border-radius: 6px">
             <p class="allTitile" style="text-align: center; font-size: 1.5em; margin-top: 0px; margin-bottom: 4px">กำลังฟัง... <i class="fa fa-microphone"></i></p>
             <div class="record-circle"></div>
-            <!-- <div class="text-center"><img id ="load" src="image/loading.gif"></div> -->
+            <div class ="w3-center">
+            <button class="w3-btn w3-hover-opacity w3-red w3-section w3-round w3-border-bottom w3-border-indigo  w3-layout-cell  action-button" id ="stop"><i class="fa fa-stop-circle-o" style="font-size:40px"></i></button>
+            </div>
+             <!-- <div class="text-center"><img id ="load" src="image/loading.gif"></div> -->
         </div>
     </div>
 
-    <span id ="lastReg" style="position: fixed; top: 95%; left: 50%;">ผลการ Recognition ล่าสุด : none </span>
+    
 </body>
 
 

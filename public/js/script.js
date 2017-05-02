@@ -8,7 +8,7 @@ const STATE_RECOGNIZING_CONFIRM = 5;
 var currentState = STATE_IDLE;
 var pendingFunction = function() {};
 var pendingParams = null;
-
+var courseName = "";
 var queryTemplate = function() {};
 
 // main ##########################################################
@@ -188,10 +188,15 @@ function record() {
 }
 
 function registerSoundRecordingCommands() {
-    $('#record').mousedown(record)
-    $('#record').mouseup(function() {
+    $('#record').mousedown(record);
+    $('#record2').mousedown(record);
+    
+    $('#stop').mousedown(function() {
         stopRecording(execute);
     })
+    
+    
+    
     $(document).keydown(function(e) {
         if (e.keyCode == 32) {
             record();
@@ -226,23 +231,26 @@ function recognizeFunction(blob) {
 
         //for test
 
-        // pendingFunction = showCoursesByDayTime; // test function
-        // data.needsConfirm = true;
-       // data.sentence ="teststttts"
+        //pendingFunction = showAllCourses; // test function
+        //data.needsConfirm = false;
+        //data.sentence ="teststttts"
         //
         // data.functionName = 'get_course_by_id'; //register
         // data.params = {course : "2502390"}; //getCourseByID
         // data.params = {day : "fri",time : "morning"   } ; //getCourseByDayTime
 
-        // data.params = {course:"2604362" ,section : "2"} ; //register
-        // data.functionName = 'register_course'
+        //data.params = {course:"0123101" ,section : "2"} ; //register
+        //data.functionName = 'register_course'
 
-         //data.params = {course:"2313213"} ; //withdraw
-         //data.functionName = 'withdraw_course'; //withdraw
+         //data.params = {course:"3743422"} ; //withdraw
+        //data.functionName = 'get_all_courses'; //withdraw
 
         //end test
+        
+        //display recognition result
         $("#confirmFunc").text(data.sentence);
         $("#lastReg").text("ผลการ Recognition ล่าสุด : "+data.sentence);
+
         switch (data.functionName) {
             case 'get_all_courses':
                 pendingFunction = showAllCourses;
@@ -277,14 +285,18 @@ function recognizeFunction(blob) {
         }
 
         if (data.needsConfirm) {
-            var courseName = "";
-            if (data.params.course == "0123101") courseName = "PARAGRAP WRITING";
-            else if (data.params.course == "2313213") courseName = "DIGITAL PHOTO";
+            if (data.params.course == "0123101") {courseName = "PARAGRAP WRITING"; }
+            else if (data.params.course == "2313213"){ courseName = "DIGITAL PHOTO"; }
             else if (data.params.course == "2502390") courseName = "INTRO PACK DESIGN";
             else if (data.params.course == "2604362") courseName = "PERSONAL FINANCE";
             else if (data.params.course == "3700105") courseName = "FOOD SCI ART";
             else if (data.params.course == "3743422") courseName = "WEIGHT CONTROL";
-
+            else if (data.params.course == "2110432") courseName = "AUTO SPEECH RECOG";
+            else {
+                speak(['say_again']); //อัดเสียง - ไม่มีรายวิชานี้ในระบบ
+                setState(STATE_IDLE);
+                return;
+            }
             if (data.functionName == 'register_course') {
                 speak(['register', 'subj/' + courseName, 'section', 'num/' + data.params.section, 'are_you_sure']);
             } else if (data.functionName == 'withdraw_course') {
@@ -293,7 +305,7 @@ function recognizeFunction(blob) {
                 console.log("wrong function");
             }
             setState(STATE_WAIT_CONFIRM);
-            console.log("check :"+currentState);
+            console.log("check state :"+currentState);
         } else {
             pendingFunction(pendingParams);
             setState(STATE_IDLE);
@@ -303,7 +315,7 @@ function recognizeFunction(blob) {
         setState(STATE_IDLE);
     });
 }
-
+//
 function recognizeConfirm(blob) {
     console.log('recognizeConfirm')
     var formData = new FormData();
@@ -316,17 +328,17 @@ function recognizeConfirm(blob) {
         data: formData
     }).done(function(data) {
         // // for test
-         //data.result = 'confirm';
+        //data.result = 'confirm';
         // // end test
         console.log(data);
-        $("#confirmFunc").text(data.sentence);
+        $("#lastReg").text("ผลการ Recognition ล่าสุด : "+data.sentence); //display recognition result
         if (data.result == 'confirm') {
             console.log("pass");
             pendingFunction(pendingParams);
             setState(STATE_IDLE);
         } else if (data.result == 'cancel') {
             if (pendingFunction === register) {
-                speak(['cancel_registering', ]);
+                speak(['cancel_registering']);
             } else {
                 speak(['cancel_withdrawing']);
             }
@@ -402,8 +414,15 @@ function showEnrolledCourses(params, shouldSpeak = true) {
 
 function showCourseById(params, shouldSpeak = true) {
     var id = params.course;
+    if (id == "0123101") cName = "PARAGRAP WRITING"; 
+    else if (id == "2313213") cName = "DIGITAL PHOTO"; 
+    else if (id == "2502390") cName = "INTRO PACK DESIGN";
+    else if (id == "2604362") cName = "PERSONAL FINANCE";
+    else if (id == "3700105") cName = "FOOD SCI ART";
+    else if (id == "3743422") cName = "WEIGHT CONTROL";
+    else if (id == "2110432") cName = "AUTO SPEECH RECOG";
     $("#contain").empty();
-    $("#topBar").text("รายวิชา " + id);
+    $("#topBar").text("รายวิชา " + cName);
     $.ajax({
         type: "GET",
         url: 'http://localhost:8000/api/courses/' + id,
@@ -431,8 +450,17 @@ function showCourseById(params, shouldSpeak = true) {
 function showCoursesByDayTime(params, shouldSpeak = true) {
     var day = params.day;
     var time = params.time;
+    if(day == "mon") dayShow ="จันทร์"
+    else if(day == "tue") dayShow ="อังคาร"
+    else if(day == "wed") dayShow ="พุธ"
+    else if(day == "thu") dayShow ="พฤหัส"
+    else if(day == "fri") dayShow ="ศุกร์"
+    else if(day == "sat") dayShow ="เสาร์"
+    else if(day == "sun") dayShow ="อาทิตย์"
+    if(time == "morning") timeShow ="เช้า"
+    else if(time == "afternoon") timeShow ="บ่าย" 
     $("#contain").empty();
-    $("#topBar").text("รายวิชาวัน " + day + " " + time);
+    $("#topBar").text("รายวิชาวัน " + dayShow + " " + timeShow);
     $.ajax({
         type: "GET",
         url: 'http://localhost:8000/api/courses/' + day + '/' + time,
@@ -475,12 +503,26 @@ function register(params, shouldSpeak = true) {
         if (shouldSpeak) {
             if (data.success)
                 speak(['register', 'subj/' + data.section.course.name, 'section', 'num/' + data.section.section_number, 'success']);
+            else {
+                if(data.message == "Course already registered.") speak(['you_register' , 'subj/' +courseName , "already"]);
+                else speak(['say_again']);
+            }
         }
     }).fail(function(jqXHR, textStatus, errorThrown) {
+        showCourseById({
+            course: pendingParams.course
+        }, false);
+        if (courseName == "PARAGRAP WRITING" ) speak(['subj/' + courseName,"can_register",'num/1' ,'num/2','num/3','num/4','num/5','num/6','only']);
+        else if (courseName == "DIGITAL PHOTO") speak(['subj/' + courseName,"can_register",'num/1' ,'num/2','num/3','num/4','num/5','only']);
+        else if (courseName == "INTRO PACK DESIGN")speak(['subj/' + courseName,"can_register",'num/1' ,'num/2','only']);
+        else if (courseName == "PERSONAL FINANCE")speak(['subj/' + courseName,"can_register",'num/1' ,'num/2','only']);
+        else if (courseName == "FOOD SCI ART")speak(['subj/' + courseName,"can_register",'num/1','only']);
+        else if (courseName == "WEIGHT CONTROL")speak(['subj/' + courseName,"can_register",'num/1' ,'num/2','only']);
+        else if (courseName == "AUTO SPEECH RECOG")speak(['subj/' + courseName,"can_register",'num/1' ,'only']);
         console.log(jqXHR)
         console.log(textStatus)
         console.log(errorThrown)
-        alert('registration error: ' + errorThrown)
+        //alert('registration error: ' + errorThrown)   
     })
 }
 
@@ -497,7 +539,12 @@ function withdraw(params, shouldSpeak = true) {
         if (shouldSpeak) {
             if (data.success)
                 speak(['withdraw', 'subj/' + data.course.name, 'success']);
-        }
+            else {
+                if(data.message == "Course not registered.") speak(['not_register' , 'subj/' +courseName ]);
+                else speak(['say_again']);
+            }      
+         }
+        
     }).fail(function(jqXHR, textStatus, errorThrown) {
         console.log(jqXHR)
         console.log(textStatus)
