@@ -16,17 +16,19 @@
     right: 10px;
     padding: 20px;
     background-color: #a00;
-    color: #fff;
+    /*color: #fff;*/
     font-size: 20pt;
     border-radius: 5px;
+}
+
+.panel-anim, .panel-anim>* {
     transition: all 0.3s;
 }
-.recording:hover {
-    background-color: #0f0;
+.panel-hide {
+  pointer-events: none;
+  opacity: 0;
 }
-.not-rec {
-    pointer-events: none;
-    opacity: 0;
+.panel-hide>* {
     transform: translateY(-20px);
 }
 
@@ -51,13 +53,14 @@
 	width: 300px;
 	height : 300px;
 	margin-top: -100px;
-	margin-bottom: -100px; 
+	margin-bottom: -100px;
 }
-#ajaxBusy{
+/*#ajaxBusy{
     display: none;
-}
+}*/
 
-.upload{
+.action-button{
+    font-weight: normal;
     margin-bottom: 5px;
     font-size: 1.1em;
 }
@@ -83,9 +86,43 @@ label{
     font-size: 0.8em;
 }
 #showInput{
-   width: 160px; 
+   width: 160px;
 }
 
-#confirm{
+/*#confirm{
     display: none;
+}*/
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.record-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #f00;
+  animation: flicker 1s infinite;
+  margin: 10px auto;
+}
+@keyframes flicker {
+  0% {opacity: 0;}
+  50% {opacity: 1;}
+  100% {opacity: 0;}
 }

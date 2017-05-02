@@ -24,7 +24,7 @@ $(function() {
     $("#courseDisplay").click(showEnrolledCourses);
     registerListeners();
     uploadButton();
-    
+
     //speak(['กรุณาพูดใหม่อีกครั้ง']);
 });
 // end main ######################################################
@@ -36,17 +36,17 @@ function uploadButton(){
         if(file_name!=""){
         var file_name_index = file_name.lastIndexOf("\\") + 1;
         file_name = file_name.substring(file_name_index, file_name.length);
-        $("#showInput").attr("placeholder", file_name); 
+        $("#showInput").attr("placeholder", file_name);
         }
-        //show when confirm    
-        file_name = $('#wavfile2').val();    
+        //show when confirm
+        file_name = $('#wavfile2').val();
         if(file_name!=""){
         var file_name_index = file_name.lastIndexOf("\\") + 1;
-        file_name = file_name.substring(file_name_index, file_name.length);    
-        $("#showInput2").attr("placeholder", file_name);         
+        file_name = file_name.substring(file_name_index, file_name.length);
+        $("#showInput2").attr("placeholder", file_name);
         }
-        
-    });   
+
+    });
 }
 
 function initTemplate() {
@@ -97,6 +97,12 @@ function registerListeners() {
             course: cid
         });
     });
+
+    $('#wavfile, #wavfile2').off();
+    $('#wavfile, #wavfile2').change(function () {
+        $(this).trigger('blur');
+        $(this).closest('form').submit();
+    });
 }
 
 function setState(nextState) {
@@ -106,45 +112,47 @@ function setState(nextState) {
     }
     else if (currentState === STATE_IDLE) {
         if (nextState === STATE_RECORDING_FUNCTION) {
-            $('.recording').removeClass('not-rec');
-        } else if(nextState === STATE_RECOGNIZING_FUNCTION   ){
-            
+            $('#recording').removeClass('panel-hide');
+        } else if(nextState === STATE_RECOGNIZING_FUNCTION){
+            $("#ajaxBusy").removeClass('panel-hide');
         } else return;
     }
      else if (currentState === STATE_RECORDING_FUNCTION) {
+        $('#recording').addClass('panel-hide');
         if (nextState === STATE_RECOGNIZING_FUNCTION) {
-            $("#ajaxBusy").show();
+            $("#ajaxBusy").removeClass('panel-hide');
         } else return;
     }
     else if (currentState === STATE_RECOGNIZING_FUNCTION) {
-        $("#ajaxBusy").hide();
+        $("#ajaxBusy").addClass('panel-hide');
         if (nextState === STATE_IDLE) {
-            $('.recording').addClass('not-rec');
-            
+            $('#recording').addClass('panel-hide');
         } else if (nextState === STATE_WAIT_CONFIRM) {
-            $("#confirm").show();
-            
-         
+            $("#confirm").removeClass('panel-hide');
         } else return;
     }
     else if (currentState === STATE_WAIT_CONFIRM) {
         if (nextState === STATE_RECORDING_CONFIRM) {
-            $("#confirm").hide();
-            // no action
+            $("#confirm").addClass('panel-hide');
+            $('#recording').removeClass('panel-hide');
         } else if (nextState === STATE_IDLE) {
-            $("#confirm").hide();
-            $('.recording').addClass('not-rec');
+            $("#confirm").addClass('panel-hide');
+            $('#recording').addClass('panel-hide');
         } else return;
     }
     else if (currentState === STATE_RECORDING_CONFIRM) {
+        $('#recording').addClass('panel-hide');
         if (nextState === STATE_RECOGNIZING_CONFIRM) {
-           $("#ajaxBusy").show();
+           $("#ajaxBusy").removeClass('panel-hide');
         } else return;
     }
     else if (currentState === STATE_RECOGNIZING_CONFIRM) {
-        $("#ajaxBusy").hide();
-        if (nextState === STATE_IDLE) {
-            $('.recording').addClass('not-rec');
+        if (nextState === STATE_WAIT_CONFIRM) {
+            $("#ajaxBusy").addClass('panel-hide');
+            $("#confirm").removeClass('panel-hide');
+        } else if (nextState === STATE_IDLE) {
+            $("#ajaxBusy").addClass('panel-hide');
+            $('.recording').addClass('panel-hide');
         } else return;
     }
     else {
@@ -157,7 +165,7 @@ function execute(blob) {
     // try {
     if (currentState === STATE_RECORDING_FUNCTION || currentState === STATE_IDLE) {
         setState(STATE_RECOGNIZING_FUNCTION);
-        console.log("before function: "+currentState);
+        console.log("before function: "+ currentState);
         recognizeFunction(blob);
     } else if (currentState === STATE_RECORDING_CONFIRM || currentState === STATE_WAIT_CONFIRM) {
         setState(STATE_RECOGNIZING_CONFIRM);
@@ -219,22 +227,22 @@ function recognizeFunction(blob) {
         //for test
 
         // pendingFunction = showCoursesByDayTime; // test function
-        //data.needsConfirm = true;
+        // data.needsConfirm = true;
        // data.sentence ="teststttts"
         //
         // data.functionName = 'get_course_by_id'; //register
         // data.params = {course : "2502390"}; //getCourseByID
         // data.params = {day : "fri",time : "morning"   } ; //getCourseByDayTime
 
-        //data.params = {course:"2604362" ,section : "2"} ; //register
-        //data.functionName = 'register_course'    
-       
+        // data.params = {course:"2604362" ,section : "2"} ; //register
+        // data.functionName = 'register_course'
+
          //data.params = {course:"2313213"} ; //withdraw
          //data.functionName = 'withdraw_course'; //withdraw
 
         //end test
-        $("#confirmFunc").text(data.sentence); 
-        $("#lastReg").text("ผลการ Recognition ล่าสุด : "+data.sentence); 
+        $("#confirmFunc").text(data.sentence);
+        $("#lastReg").text("ผลการ Recognition ล่าสุด : "+data.sentence);
         switch (data.functionName) {
             case 'get_all_courses':
                 pendingFunction = showAllCourses;
@@ -255,12 +263,18 @@ function recognizeFunction(blob) {
                 pendingFunction = withdraw;
                 break;
             default:
-                pendingFunction = function () {};   // reset
+                pendingFunction = null;   // reset
                 break;
         }
 
         // TODO make sure the format is compatible
         pendingParams = data.params || null;
+
+        if (!pendingFunction) {
+            speak(['say_again']);
+            setState(STATE_IDLE);
+            return;
+        }
 
         if (data.needsConfirm) {
             var courseName = "";
@@ -304,7 +318,8 @@ function recognizeConfirm(blob) {
         // // for test
          //data.result = 'confirm';
         // // end test
-        $("#confirmFunc").text(data.sentence); 
+        console.log(data);
+        $("#confirmFunc").text(data.sentence);
         if (data.result == 'confirm') {
             console.log("pass");
             pendingFunction(pendingParams);
@@ -318,7 +333,7 @@ function recognizeConfirm(blob) {
             setState(STATE_IDLE);
         } else { // if (data.result == 'unknown') {
             setState(STATE_WAIT_CONFIRM);
-            
+            speak(['say_again']);
         }
     }).fail(function(j, t, e) {
         console.log("pass2");

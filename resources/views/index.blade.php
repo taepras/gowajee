@@ -40,12 +40,15 @@
             <hr>
             <p class="w3-bar-item">กดด้านล่าง หรือกดปุ่ม Spacebar ค้างไว้เพื่อพูด</p>
             <div class="w3-bar-item w3-center">
-                <button class="w3-btn w3-hover-opacity w3-red w3-section w3-round w3-border-bottom w3-border-indigo  w3-layout-cell time" id ="record" >เริ่มการอัดเสียง <i class="fa fa-microphone" style="font-size:25px"></i></button>
-                <input class="margin-left" id = "showInput" type="text" placeholder="No file choosen" readonly>
+                <button class="w3-btn w3-hover-opacity w3-red w3-section w3-round w3-border-bottom w3-border-indigo action-button w3-layout-cell time" id ="record" >กดเพื่อพูด <i class="fa fa-microphone" style="font-size:25px"></i></button>
+                <!-- <input class="margin-left" id = "showInput" type="text" placeholder="No file choosen" readonly> -->
                 <form id="uploadForm" enctype="multipart/form-data">
-                    <input type="file" name="wavfile" id="wavfile"/>
-                    <label class="w3-btn w3-hover-opacity w3-blue w3-round w3-border-bottom w3-border-indigo btn-pos-correction" for="wavfile" >Choose File</label>
-                    <button class="w3-btn w3-hover-opacity w3-blue w3-round w3-border-bottom w3-border-indigo upload" type="submit" >upload</button>
+                  <label class="w3-btn w3-hover-opacity w3-blue w3-section w3-round w3-border-bottom w3-border-indigo upload action-button btn-file">
+                    อัปโหลด .wav <i class="fa fa-upload" style="font-size:25px"></i>
+                    <input type="file" name="wavfile" id="wavfile" hidden/>
+                  </label>
+                    <!-- <label class="w3-btn w3-hover-opacity w3-blue w3-round w3-border-bottom w3-border-indigo btn-pos-correction" for="wavfile" >Choose File</label> -->
+                    <!-- <button class="w3-btn w3-hover-opacity w3-blue w3-round w3-border-bottom w3-border-indigo upload" type="submit" >upload</button> -->
                 </form>
             </div>
         </div>
@@ -79,9 +82,9 @@
         </div>
     </div>
 
-    <div class="recording not-rec">
+    <!-- <div class="recording not-rec">
         RECORDING...
-    </div>
+    </div> -->
     <script>
         $("#uploadForm").submit(function(e){
             e.preventDefault();
@@ -90,30 +93,30 @@
             //console.log(currentState);
         });
     </script>
-        
-    <div id ="confirm" style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1">
-        <div style="width: 400px; height: 280px; margin: auto; background-color: white; position: relative; top: calc(50% - 150px); padding-top: 24px; border-radius: 6px">
+
+    <div id ="confirm" class="panel-anim panel-hide" style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1">
+        <div style="width: 400px; margin: auto; background-color: white; position: relative; top: calc(50% - 150px); padding-top: 24px; border-radius: 6px">
             <p class="allTitile" style="text-align: center; font-size: 1.5em; margin-top: 0px; margin-bottom: 4px">กรุณายืนยันคำสั่ง</p>
-            <p id="confirmFunc" style="text-align: center; font-size: 1.5em; margin-top: 0px; margin-bottom: 4px">Funtion</p>
+            <p id="confirmFunc" style="text-align: center; font-size: 1.5em; margin-top: 0px; margin-bottom: 4px">Function</p>
             <br>
             <p class="w3-center">กดด้านล่าง หรือกดปุ่ม Spacebar ค้างไว้เพื่อพูด</p>
             <div class="w3-row ">
-                <div class ="w3-container w3-center w3-half">    
-                <button class="w3-btn w3-hover-opacity w3-red w3-section w3-round w3-border-bottom w3-border-indigo  w3-layout-cell time" id ="record" >เริ่มการอัดเสียง <i class="fa fa-microphone" style="font-size:25px"></i></button>
+                <div class ="w3-container w3-center w3-half">
+                <button class="w3-btn w3-hover-opacity w3-red w3-section w3-round w3-border-bottom w3-border-indigo  w3-layout-cell time action-button" id ="record" >กดเพื่อพูด <i class="fa fa-microphone" style="font-size:25px"></i></button>
                 </div>
                 <div class ="w3-container w3-half w3-center">
-                <input class="" id = "showInput2" type="text" placeholder="No file choosen" readonly>
+                <!-- <input class="" id = "showInput2" type="text" placeholder="No file choosen" readonly> -->
                 <form  id="uploadForm2" enctype="multipart/form-data">
-                    <input class="w3-margin-left " type="file" name="wavfile" id="wavfile2"/>
-                    <label id ="choose" class="w3-btn w3-hover-opacity w3-blue w3-round w3-border-bottom w3-border-indigo btn-pos-correction" for="wavfile2" >Choose File</label>
-                    <br>
-                    <button class="w3-btn w3-hover-opacity w3-blue w3-round w3-border-bottom w3-border-indigo btn-pos-correction upload" type="submit" >upload</button>
+                  <label class="w3-btn w3-hover-opacity w3-blue w3-section  w3-round w3-border-bottom w3-border-indigo upload btn-file action-button">
+                    อัปโหลด .wav <i class="fa fa-upload" style="font-size:25px"></i>
+                    <input type="file" name="wavfile2" id="wavfile2" hidden/>
+                  </label>
                 </form>
-                </div>  
+                </div>
             </div>
-        </div> 
-    </div> 
-    
+        </div>
+    </div>
+
     <script>
         $("#uploadForm2").submit(function(e){
             e.preventDefault();
@@ -122,14 +125,22 @@
             //console.log(currentState);
         });
     </script>
-        
-    <div id ="ajaxBusy" style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1">
-        <div style="width: 300px; height: 280px; margin: auto; background-color: white; position: relative; top: calc(50% - 100px); padding-top: 24px; border-radius: 6px">
-            <p class="allTitile" style="text-align: center; font-size: 1.1em; margin-top: 0px; margin-bottom: 4px">Now Loading...</p>
-            <div><img id ="load" src="image/loading.gif"></div>
-        </div> 
-    </div> 
-    
+
+    <div id ="ajaxBusy" class="panel-anim panel-hide" style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1">
+        <div style="width: 400px; margin: auto; background-color: white; position: relative; top: calc(50% - 100px); padding: 24px; border-radius: 6px">
+            <p class="allTitile" style="text-align: center; font-size: 2em; margin-top: 0px; margin-bottom: 4px">กำลังถอดความ...</p>
+            <div class="text-center"><img id ="load" src="image/loading.gif"></div>
+        </div>
+    </div>
+
+    <div id="recording" class="panel-anim panel-hide" style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1">
+        <div style="width: 400px; margin: auto; background-color: white; position: relative; top: calc(50% - 100px); padding: 24px; border-radius: 6px">
+            <p class="allTitile" style="text-align: center; font-size: 1.5em; margin-top: 0px; margin-bottom: 4px">กำลังฟัง... <i class="fa fa-microphone"></i></p>
+            <div class="record-circle"></div>
+            <!-- <div class="text-center"><img id ="load" src="image/loading.gif"></div> -->
+        </div>
+    </div>
+
     <span id ="lastReg" style="position: fixed; top: 95%; left: 50%;">ผลการ Recognition ล่าสุด : none </span>
 </body>
 
