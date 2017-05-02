@@ -220,6 +220,9 @@ function recognizeFunction(blob) {
             case 'withdraw_course':
                 pendingFunction = withdraw;
                 break;
+            default:
+                pendingFunction = function () {};   // reset
+                break;
         }
 
         // TODO make sure the format is compatible
@@ -245,7 +248,6 @@ function recognizeFunction(blob) {
 
         } else {
             pendingFunction(pendingParams);
-            // pendingFunction = function () {};   // reset
             setState(STATE_IDLE);
         }
     }).fail(function(j, t, e) {
