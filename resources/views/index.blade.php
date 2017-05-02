@@ -41,8 +41,11 @@
             <p class="w3-bar-item">กดด้านล่าง หรือกดปุ่ม Spacebar ค้างไว้เพื่อพูด</p>
             <div class="w3-bar-item">
                 <button class="w3-btn w3-hover-opacity w3-red w3-section w3-round w3-border-bottom w3-border-indigo  w3-layout-cell time" id ="record" >เริ่มการอัดเสียง <i class="fa fa-microphone" style="font-size:25px"></i></button>
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <input type="file" name="wavfile" id="wavfile">
+                    <button type="submit">upload</button>
+                </form>
             </div>
-            <a href="#" id="save">save</a>
         </div>
 
         <div id="page">
@@ -77,6 +80,14 @@
     <div class="recording not-rec">
         RECORDING...
     </div>
+    <script>
+        $("#uploadForm").submit(function(e){
+            e.preventDefault();
+            console.log('executing...')
+            execute($('#wavfile')[0].files[0])
+            console.log(currentState);
+        });
+    </script>
 </body>
 
 
