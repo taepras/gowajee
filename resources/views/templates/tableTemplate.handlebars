@@ -1,0 +1,69 @@
+<script id="table-template" type="text/x-handlebars-template">
+    {{#unless hideFilter}}
+    <form id="filter" class="form-inline">
+        <div class="form-group">
+            <label>วัน</label>
+            <select class="form-control" id="select-day" value="{{day}}">
+                <option></option>
+                <option value="mon">จันทร์</option>
+                <option value="tue">อังคาร</option>
+                <option value="wed">พุธ</option>
+                <option value="thu">พฤหัส</option>
+                <option value="fri">ศุกร์</option>
+                <option value="sat">เสาร์</option>
+                <option value="sun">อาทิตย์</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>เวลา</label>
+            <select class="form-control" id="select-time" value="{{time}}">
+                <option></option>
+                <option value="morning">เช้า</option>
+                <option value="afternoon">บ่าย</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">กรองผลการค้นหา</button>
+    </form>
+    <hr>
+    {{/unless}}
+    <table class="table">
+        <tr>
+            <th>รหัสวิชา</th>
+            <th>ชื่อวิชา</th>
+            <th>ตอนเรียน</th>
+            <th>วัน-เวลา</th>
+            <th>ผู้สอน</th>
+            <th>จำนวนนิสิต</th>
+            <th></th>
+        </tr>
+        {{#if section}}
+            {{#each section}}
+                <tr>
+                    <td><a href="#" class="course-id" data-course-id="{{course.id}}">{{course.id}}</a></td>
+                    <td><a href="#" class="course-id" data-course-id="{{course.id}}">{{course.name}}</a></td>
+                    <td>{{section_number}}</td>
+                    <td>{{day}} {{time}}</td>
+                    <td>{{lecturer}}</td>
+                    <td>{{enrolled}}/{{capacity}}</td>
+                    <td>
+                        {{#if course.is_enrolled}}
+                        <button type="button" class="btn btn-danger btn-xs withdraw"
+                            data-course-id="{{course.id}}">
+                            ถอนรายวิชา
+                        </button>
+                        {{else}}
+                        <button type="button" class="btn btn-primary btn-xs register"
+                            data-course-id="{{course.id}}" data-section-number="{{section_number}}">
+                            ลงทะเบียน
+                        </button>
+                        {{/if}}
+                    </td>
+                </td>
+            {{/each}}
+        {{else}}
+            <tr>
+                <td colspan="7" class="text-center">ไม่พบรายวิชาที่ค้นหา</td>
+            </tr>
+        {{/if}}
+    </table>
+</script>
