@@ -117,7 +117,7 @@ function startRecording() {
 function recognizeFunction(blob) {
     console.log('recognizeFunction')
     var formData = new FormData();
-    formData.append('wavfile', blob);
+    formData.append('wavfile', blob, 'sound.wav');
     $.ajax({
         url: 'http://localhost:8000/api/recognize/function',
         method: 'post',
@@ -198,7 +198,7 @@ function recognizeFunction(blob) {
 function recognizeConfirm(blob) {
     console.log('recognizeConfirm')
     var formData = new FormData();
-    formData.append('wavfile', blob);
+    formData.append('wavfile', blob, 'sound.wav');
     $.ajax({
         url: 'http://localhost:8000/api/recognize/confirm',
         method: 'post',

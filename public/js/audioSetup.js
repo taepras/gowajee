@@ -50,7 +50,7 @@ function gotBuffers( buffers, callback ) {
 }
 
 function doneEncoding( blob, callback) {
-    Recorder.setupDownload( blob, "myRecording-" + recIndex + ".wav" );
+    // Recorder.setupDownload( blob, "myRecording-" + recIndex + ".wav" );
     recIndex++;
     callback(blob);
 }
