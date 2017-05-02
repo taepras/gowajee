@@ -336,7 +336,7 @@ function showEnrolledCourses(params, shouldSpeak = true) {
                 if (data.length > 0)
                     speak(getCoursesSpeakList(['registered_list'], data));
                 else
-                    speck(['no_courses_registered'])
+                    speak(['no_courses_registered'])
             }
         },
         error: function(error) {
