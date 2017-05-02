@@ -97,7 +97,7 @@ class SpeechController extends Controller
             $output = exec('python ./python/client.py -u ws://localhost:8080/client/ws/speech -r 32000 ./wav/'.$filename);
             $output = json_decode($output);
             $out_json = [];
-            // $out_json['sentence'] = $output[0];
+            $out_json['sentence'] = $output[0];
             if($output[1] == 1){
                 $out_json['result'] = "confirm";
             } else if($output[1] == 2){
