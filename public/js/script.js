@@ -164,7 +164,7 @@ function setState(nextState) {
             $("#confirm").removeClass('panel-hide');
         } else if (nextState === STATE_IDLE) {
             $("#ajaxBusy").addClass('panel-hide');
-            $('.recording').addClass('panel-hide');
+            $('#recording').addClass('panel-hide');
         } else return;
     }
     else {
@@ -190,6 +190,7 @@ function execute(blob) {
 }
 
 function record() {
+    // stopSpeaking();
     if (currentState === STATE_IDLE) {
         startRecording();
         setState(STATE_RECORDING_FUNCTION);
@@ -587,15 +588,16 @@ function flipCourseSection(data) {
     return dataFormatted;
 }
 
+var audioQueue = [];
 function speak(words, rate = 1.6) {
     audios = [];
     loadedCount = 0;
     for (var i = 0; i < words.length; i++) {
         var audio = new Audio('/tts/' + words[i] + '.wav');
+        audioQueue.push(audio);
         audios.push(audio);
         audio.addEventListener('loadedmetadata', function() {
             loadedCount++;
-
             if (loadedCount >= words.length) {
                 startSpeaking(audios, rate)
             }
@@ -638,6 +640,16 @@ function getSectionsSpeakList(speakList, data) {
     }
     return speakList;
 }
+
+// function stopSpeaking() {
+//     console.log(audioQueue)
+//     for (var i = 0; i < audioQueue.length; i++) {
+//         audioQueue[i].pause();
+//         audioQueue[i].currentTime = 0;
+//         delete audioQueue[i];
+//     }
+//     audioQueue = [];
+// }
 
 // $(document).ready(function() {
 //     //แยก user กับ admin

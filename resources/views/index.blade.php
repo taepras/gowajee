@@ -5,15 +5,15 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+        <link rel="stylesheet" href="/css/lib/w3.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/lib/bootstrap.min.css">
         <link rel="stylesheet" href="/css/style.css">
 
         <?php include(base_path().'/resources/views/templates/tableTemplate.handlebars'); ?>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js"></script>
+        <script src="/js/lib/jquery.min.js"></script>
+        <script src="/js/lib/handlebars.min.js"></script>
         <script src="/js/recorder/recorder.js"></script>
         <script src="/js/audioSetup.js"></script>
         <script src="/js/script.js"> </script>
@@ -145,7 +145,7 @@
         </div>
     </div>
 
-    
+
 </body>
 
 
