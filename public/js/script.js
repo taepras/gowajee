@@ -52,6 +52,18 @@ function uploadButton(){
 function initTemplate() {
     var source = $('#table-template').html();
     queryTemplate = Handlebars.compile(source);
+    Handlebars.registerHelper('thai', function(str){
+        var wordMap = {
+            'mon': 'วันจันทร์',
+            'tue': 'วันอังคาร',
+            'wed': 'วันพุธ',
+            'thu': 'วันพฤหัส',
+            'fri': 'วันศุกร์',
+            'morning': 'เช้า',
+            'afternoon': 'บ่าย'
+        };
+        return wordMap[str];
+    });
 }
 
 function registerListeners() {
@@ -190,7 +202,7 @@ function record() {
 function registerSoundRecordingCommands() {
     $('#record').mousedown(record);
     $('#record2').mousedown(record);
-    
+
 	$(document).mouseup(function() {
 		if(currentState === STATE_RECORDING_CONFIRM || currentState === STATE_RECORDING_FUNCTION)
 			stopRecording(execute);
@@ -198,9 +210,9 @@ function registerSoundRecordingCommands() {
     $('#stop').mousedown(function() {
         stopRecording(execute);
     })
-    
-    
-    
+
+
+
     $(document).keydown(function(e) {
         if (e.keyCode == 32) {
             record();
@@ -250,7 +262,7 @@ function recognizeFunction(blob) {
         //data.functionName = 'get_all_courses'; //withdraw
 
         //end test
-        
+
         //display recognition result
         $("#confirmFunc").text(data.sentence);
         $("#lastReg").text("ผลการ Recognition ล่าสุด : "+data.sentence);
@@ -418,8 +430,8 @@ function showEnrolledCourses(params, shouldSpeak = true) {
 
 function showCourseById(params, shouldSpeak = true) {
     var id = params.course;
-    if (id == "0123101") cName = "PARAGRAP WRITING"; 
-    else if (id == "2313213") cName = "DIGITAL PHOTO"; 
+    if (id == "0123101") cName = "PARAGRAP WRITING";
+    else if (id == "2313213") cName = "DIGITAL PHOTO";
     else if (id == "2502390") cName = "INTRO PACK DESIGN";
     else if (id == "2604362") cName = "PERSONAL FINANCE";
     else if (id == "3700105") cName = "FOOD SCI ART";
@@ -462,9 +474,9 @@ function showCoursesByDayTime(params, shouldSpeak = true) {
     else if(day == "sat") dayShow ="เสาร์"
     else if(day == "sun") dayShow ="อาทิตย์"
     if(time == "morning") timeShow ="เช้า"
-    else if(time == "afternoon") timeShow ="บ่าย" 
+    else if(time == "afternoon") timeShow ="บ่าย"
     $("#contain").empty();
-    $("#topBar").text("รายวิชาวัน " + dayShow + " " + timeShow);
+    $("#topBar").text("รายวิชา วัน" + dayShow + " " + timeShow);
     $.ajax({
         type: "GET",
         url: 'http://localhost:8000/api/courses/' + day + '/' + time,
@@ -526,7 +538,7 @@ function register(params, shouldSpeak = true) {
         console.log(jqXHR)
         console.log(textStatus)
         console.log(errorThrown)
-        //alert('registration error: ' + errorThrown)   
+        //alert('registration error: ' + errorThrown)
     })
 }
 
@@ -546,9 +558,9 @@ function withdraw(params, shouldSpeak = true) {
             else {
                 if(data.message == "Course not registered.") speak(['not_register' , 'subj/' +courseName ]);
                 else speak(['say_again']);
-            }      
+            }
          }
-        
+
     }).fail(function(jqXHR, textStatus, errorThrown) {
         console.log(jqXHR)
         console.log(textStatus)
