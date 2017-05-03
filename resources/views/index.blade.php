@@ -95,7 +95,7 @@
         });
     </script>
 
-    <div id ="confirm" class="panel-anim panel-hide" style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1">
+    <div id ="confirm" class="fader panel-anim panel-hide" style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1">
         <div style="width: 400px; margin: auto; background-color: white; position: relative; top: calc(50% - 150px); padding-top: 24px; border-radius: 6px">
             <p class="allTitile" style="text-align: center; font-size: 1.5em; margin-top: 0px; margin-bottom: 4px">กรุณายืนยันคำสั่ง</p>
             <p id="confirmFunc" style="text-align: center; font-size: 1.5em; margin-top: 0px; margin-bottom: 4px">Function</p>
@@ -127,14 +127,14 @@
         });
     </script>
 
-    <div id ="ajaxBusy" class="panel-anim panel-hide" style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1">
+    <div id="ajaxBusy" class="fader panel-anim panel-hide" style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1">
         <div style="width: 400px; margin: auto; background-color: white; position: relative; top: calc(50% - 100px); padding: 24px; border-radius: 6px">
             <p class="allTitile" style="text-align: center; font-size: 2em; margin-top: 0px; margin-bottom: 4px">กำลังถอดความ...</p>
             <div class="text-center"><img id ="load" src="image/loading.gif"></div>
         </div>
     </div>
 
-    <div id="recording" class="panel-anim panel-hide" style="pointer-events:none; position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1">
+    <div id="recording" class="fader panel-anim panel-hide" style="pointer-events:none; position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1">
         <div style="width: 400px; margin: auto; background-color: white; position: relative; top: calc(50% - 100px); padding: 24px; border-radius: 6px">
             <p class="allTitile" style="text-align: center; font-size: 1.5em; margin-top: 0px; margin-bottom: 4px">กำลังฟัง... <i class="fa fa-microphone"></i></p>
             <div class="record-circle"></div>
