@@ -57,7 +57,7 @@ function initTemplate() {
             'mon': 'วันจันทร์',
             'tue': 'วันอังคาร',
             'wed': 'วันพุธ',
-            'thu': 'วันพฤหัส',
+            'thu': 'วันพฤหัสบดี',
             'fri': 'วันศุกร์',
             'morning': 'เช้า',
             'afternoon': 'บ่าย'
@@ -470,7 +470,7 @@ function showCoursesByDayTime(params, shouldSpeak = true) {
     if(day == "mon") dayShow ="จันทร์"
     else if(day == "tue") dayShow ="อังคาร"
     else if(day == "wed") dayShow ="พุธ"
-    else if(day == "thu") dayShow ="พฤหัส"
+    else if(day == "thu") dayShow ="พฤหัสบดี"
     else if(day == "fri") dayShow ="ศุกร์"
     else if(day == "sat") dayShow ="เสาร์"
     else if(day == "sun") dayShow ="อาทิตย์"
