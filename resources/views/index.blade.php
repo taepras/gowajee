@@ -134,13 +134,13 @@
         </div>
     </div>
 
-    <div id="recording" class="panel-anim panel-hide" style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1">
+    <div id="recording" class="panel-anim panel-hide" style="pointer-events:none; position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1">
         <div style="width: 400px; margin: auto; background-color: white; position: relative; top: calc(50% - 100px); padding: 24px; border-radius: 6px">
             <p class="allTitile" style="text-align: center; font-size: 1.5em; margin-top: 0px; margin-bottom: 4px">กำลังฟัง... <i class="fa fa-microphone"></i></p>
             <div class="record-circle"></div>
-            <div class ="w3-center">
+            <!-- <div class ="w3-center">
             <button class="w3-btn w3-hover-opacity w3-red w3-section w3-round w3-border-bottom w3-border-indigo  w3-layout-cell  action-button" id ="stop"><i class="fa fa-stop-circle-o" style="font-size:40px"></i></button>
-            </div>
+            </div> -->
              <!-- <div class="text-center"><img id ="load" src="image/loading.gif"></div> -->
         </div>
     </div>

@@ -191,6 +191,10 @@ function registerSoundRecordingCommands() {
     $('#record').mousedown(record);
     $('#record2').mousedown(record);
     
+	$(document).mouseup(function() {
+		if(currentState === STATE_RECORDING_CONFIRM || currentState === STATE_RECORDING_FUNCTION)
+			stopRecording(execute);
+    })
     $('#stop').mousedown(function() {
         stopRecording(execute);
     })
